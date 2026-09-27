@@ -1,0 +1,149 @@
+[
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "demande_facture_normalisee",
+  "label": "Demande Facture Normalisée",
+  "fieldtype": "Check",
+  "insert_after": "customer_name",
+  "default": "0",
+  "name": "Sales Invoice-demande_facture_normalisee"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "mecef_section",
+  "label": "e-MECeF",
+  "fieldtype": "Section Break",
+  "insert_after": "demande_facture_normalisee",
+  "collapsible": 1,
+  "name": "Sales Invoice-mecef_section"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "mecef_numero",
+  "label": "Code MECeF DGI",
+  "fieldtype": "Data",
+  "insert_after": "mecef_section",
+  "read_only": 1,
+  "allow_on_submit": 1,
+  "name": "Sales Invoice-mecef_numero"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "mecef_qr_code",
+  "label": "QR Code MECeF",
+  "fieldtype": "Small Text",
+  "insert_after": "mecef_numero",
+  "read_only": 1,
+  "allow_on_submit": 1,
+  "name": "Sales Invoice-mecef_qr_code"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "mecef_nim",
+  "label": "NIM MECeF",
+  "fieldtype": "Data",
+  "insert_after": "mecef_qr_code",
+  "read_only": 1,
+  "allow_on_submit": 1,
+  "name": "Sales Invoice-mecef_nim"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "mecef_envoye",
+  "label": "MECeF Envoyé",
+  "fieldtype": "Check",
+  "insert_after": "mecef_nim",
+  "read_only": 1,
+  "allow_on_submit": 1,
+  "default": "0",
+  "name": "Sales Invoice-mecef_envoye"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "mecef_tax_group",
+  "label": "Groupe taxe MECeF",
+  "fieldtype": "Select",
+  "options": "\nA\nB\nC\nD\nE\nF",
+  "insert_after": "mecef_envoye",
+  "name": "Sales Invoice-mecef_tax_group"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "fedapay_section",
+  "label": "FedaPay / Mobile Money",
+  "fieldtype": "Section Break",
+  "insert_after": "mecef_tax_group",
+  "collapsible": 1,
+  "name": "Sales Invoice-fedapay_section"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "fedapay_payment",
+  "label": "FedaPay Payment",
+  "fieldtype": "Link",
+  "options": "FedaPay Payment",
+  "insert_after": "fedapay_section",
+  "read_only": 1,
+  "allow_on_submit": 1,
+  "name": "Sales Invoice-fedapay_payment"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "mobile_money_operator",
+  "label": "Opérateur Mobile Money",
+  "fieldtype": "Select",
+  "options": "\nMTN\nMOOV\nCELTIIS",
+  "insert_after": "fedapay_payment",
+  "name": "Sales Invoice-mobile_money_operator"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "mobile_money_phone",
+  "label": "Téléphone Mobile Money",
+  "fieldtype": "Data",
+  "insert_after": "mobile_money_operator",
+  "name": "Sales Invoice-mobile_money_phone"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "fedapay_transaction_id",
+  "label": "ID transaction FedaPay",
+  "fieldtype": "Data",
+  "insert_after": "mobile_money_phone",
+  "read_only": 1,
+  "allow_on_submit": 1,
+  "name": "Sales Invoice-fedapay_transaction_id"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Item Tax Template",
+  "fieldname": "mecef_tax_group",
+  "label": "Groupe taxe MECeF",
+  "fieldtype": "Select",
+  "options": "\nA\nB\nC\nD\nE\nF",
+  "insert_after": "title",
+  "name": "Item Tax Template-mecef_tax_group"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Sales Taxes and Charges Template",
+  "fieldname": "mecef_tax_group",
+  "label": "Groupe taxe MECeF",
+  "fieldtype": "Select",
+  "options": "\nA\nB\nC\nD\nE\nF",
+  "insert_after": "title",
+  "name": "Sales Taxes and Charges Template-mecef_tax_group"
+ }
+]

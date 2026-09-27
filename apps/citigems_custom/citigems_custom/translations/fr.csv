@@ -1,0 +1,114 @@
+1 day ago,il y a 1 jour
+1 hour ago,il y a 1 heure
+1 minute ago,il y a 1 minute
+Accounting Onboarding,Intégration comptabilité
+Actions,Actions
+Add Row,Ajouter une ligne
+Apply,Appliquer
+Assign,Attribuer
+Assign To,Attribuer à
+Assigned To,Attribué à
+Attachments,Pièces jointes
+Cancel,Annuler
+Clear,Effacer
+Close,Fermer
+Configure Chart of Accounts,Configurer le plan comptable
+Confirm,Confirmer
+Create,Créer
+Create Payment Entry,Créer une écriture de paiement
+Create Sales Invoice,Créer une facture de vente
+Created By You,Créé par vous
+Created By {0},Créé par {0}
+Customize,Personnaliser
+Dashboard,Tableau de bord
+Delete,Supprimer
+Duplicate,Dupliquer
+ERPNext,DevOps
+ERPNext Integrations,Intégrations DevOps
+ERPNext Settings,Paramètres DevOps
+Frappe,DevOps
+Login to Frappe,Connexion DevOps
+Log in to Frappe,Connexion DevOps
+Edit,Modifier
+Export,Exporter
+Filter,Filtrer
+Getting Started,Prise en main
+Help,Aide
+Hide,Masquer
+Home,Accueil
+Import,Importer
+Last Edited By You,Dernière modification par vous
+Last Edited By {0},Dernière modification par {0}
+Like,J'aime
+Loading,Chargement
+Menu,Menu
+More Info,Plus d'infos
+More Information,Plus d'informations
+New,Nouveau
+No,Non
+No Data,Aucune donnée
+Print,Imprimer
+Refresh,Actualiser
+Reload,Recharger
+Rename,Renommer
+Reports,Rapports
+Reset,Réinitialiser
+Reset All,Tout réinitialiser
+Review Accounts Settings,Vérifier les paramètres comptables
+Review Chart of Accounts,Vérifier le plan comptable
+Save,Enregistrer
+Search,Rechercher
+Settings,Paramètres
+Setup Sales Taxes,Configurer les taxes de vente
+Setup Sales taxes,Configurer les taxes de vente
+Share,Partager
+Shortcuts,Raccourcis
+Show,Afficher
+Skip,Ignorer
+Skip All,Tout ignorer
+Sort,Trier
+Submit,Soumettre
+Tags,Étiquettes
+Update,Mettre à jour
+View,Voir
+View Balance Sheet,Voir le bilan
+Workspace,Espace de travail
+Yes,Oui
+completed,terminé
+just now,à l'instant
+steps completed,étapes terminées
+today,aujourd'hui
+tomorrow,demain
+yesterday,hier
+Mobile Money,Mobile Money
+Choisir l'operateur,Choisir l'opérateur
+Numero de telephone,Numéro de téléphone
+En attente de paiement,En attente de paiement
+En attente de confirmation sur le telephone du client...,En attente de confirmation sur le téléphone du client…
+Paiement Mobile Money approuve,Paiement Mobile Money approuvé
+Paiement echoue,Paiement échoué
+Paiement refuse ou expire. Veuillez reessayer.,Paiement refusé ou expiré. Veuillez réessayer.
+Delai de paiement depasse (3 min).,Délai de paiement dépassé (3 min).
+Choisissez un operateur (MTN, MOOV ou CELTIIS).,Choisissez un opérateur (MTN, MOOV ou CELTIIS).
+Saisissez un numero valide (10 chiffres, ex. {0}).,Saisissez un numéro valide (10 chiffres, ex. {0}).
+10 chiffres avec le 0 initial (ex. 0197123456),10 chiffres avec le 0 initial (ex. 0197123456)
+Operateur,Opérateur
+Ref. FedaPay,Réf. FedaPay
+WhatsApp Receipt,Reçu WhatsApp
+Envoyer le reçu par WhatsApp,Envoyer le reçu par WhatsApp
+Numero WhatsApp,Numéro WhatsApp
+Ouvrir WhatsApp,Ouvrir WhatsApp
+Generation du PDF...,Génération du PDF…
+"Un PDF du reçu sera généré, puis WhatsApp Web s'ouvrira avec le lien prêt à envoyer.","Un PDF du reçu sera généré, puis WhatsApp Web s'ouvrira avec le lien prêt à envoyer."
+WhatsApp ouvert. Envoyez le message avec le lien PDF.,WhatsApp ouvert. Envoyez le message avec le lien PDF.
+"Bonjour, voici votre reçu {0} ({1}).
+{2}","Bonjour, voici votre reçu {0} ({1}).
+{2}"
+Modern,Modern
+Classic,Classic
+cliquer pour,cliquer pour
+Indicatif pays,Indicatif pays
+"Numero national, ex. 0197123456","Numéro national, ex. 0197123456"
+"Indicatif + numero, ex. 22967929980","Indicatif + numéro, ex. 22967929980"
+Powered by DevOps,Propulsé par DevOps
+Pay Fees,Payer les frais

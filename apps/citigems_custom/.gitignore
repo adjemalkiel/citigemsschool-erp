@@ -1,0 +1,11 @@
+*.pyc
+__pycache__/
+*.egg-info/
+dist/
+.eggs/
+node_modules/
+*.min.js
+.DS_Store
+.env
+*.pem
+secrets/

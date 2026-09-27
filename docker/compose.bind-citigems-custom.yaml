@@ -1,0 +1,27 @@
+# Optional overlay: bind-mount apps/citigems_custom for local iteration.
+# Used automatically by scripts/up.sh when Docker is local and the path exists.
+services:
+  backend:
+    volumes:
+      - ../apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  configurator:
+    volumes:
+      - ../apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  create-site:
+    volumes:
+      - ../apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  frontend:
+    volumes:
+      - ../apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  queue-long:
+    volumes:
+      - ../apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  queue-short:
+    volumes:
+      - ../apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  scheduler:
+    volumes:
+      - ../apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  websocket:
+    volumes:
+      - ../apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom

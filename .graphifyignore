@@ -1,0 +1,16 @@
+# Docker / frappe_docker vendor tree
+docker/
+
+# Site static assets (generated)
+sites/assets/
+
+# Minified / vendored JS
+*.min.js
+
+# Vendored Frappe / ERPNext app trees (once present)
+apps/frappe/
+apps/erpnext/
+apps/hrms/
+apps/education/
+apps/payments/
+frappe-bench/

@@ -1,0 +1,12 @@
+[
+ {
+  "doctype": "Print Format",
+  "name": "Facture MECeF Citigems",
+  "doc_type": "Sales Invoice",
+  "module": "Citigems School",
+  "standard": "No",
+  "custom_format": 1,
+  "html": "{% if letter_head %}<div>{{ letter_head }}</div>{% endif %}\n<div style=\"font-family: sans-serif; font-size: 12px;\">\n  <h3>Facture {{ doc.name }}</h3>\n  <p>Client : {{ doc.customer_name }}<br>\n  Date : {{ doc.get_formatted(\"posting_date\") }}<br>\n  Total : {{ doc.get_formatted(\"grand_total\") }}</p>\n  <table width=\"100%\" style=\"border-collapse:collapse;\">\n    <thead><tr>\n      <th align=\"left\">Article</th><th align=\"right\">Qté</th><th align=\"right\">Montant</th>\n    </tr></thead>\n    <tbody>\n    {% for item in doc.items %}\n      <tr>\n        <td>{{ item.item_name }}</td>\n        <td align=\"right\">{{ item.qty }}</td>\n        <td align=\"right\">{{ item.get_formatted(\"amount\") }}</td>\n      </tr>\n    {% endfor %}\n    </tbody>\n  </table>\n{# Jinja snippet — attach via Print Format \"Facture MECeF\" or Letter Head.\n   Requires jinja methods mecef_qr_base64 / file_to_data_uri from hooks. #}\n{% if doc.mecef_envoye and doc.mecef_qr_code %}\n<div style=\"margin-top:12px;border-top:1px solid #ccc;padding-top:8px;font-size:11px;\">\n  <strong>Facture normalisée e-MECeF</strong><br>\n  Code : {{ doc.mecef_numero }}<br>\n  NIM : {{ doc.mecef_nim }}<br>\n  <img src=\"{{ mecef_qr_base64(doc.mecef_qr_code, 4) }}\" alt=\"QR MECeF\" style=\"width:120px;height:120px;margin-top:6px;\" />\n</div>\n{% endif %}\n\n</div>\n",
+  "print_format_type": "Jinja"
+ }
+]

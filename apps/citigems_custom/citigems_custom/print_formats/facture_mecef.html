@@ -1,0 +1,10 @@
+{# Jinja snippet — attach via Print Format "Facture MECeF" or Letter Head.
+   Requires jinja methods mecef_qr_base64 / file_to_data_uri from hooks. #}
+{% if doc.mecef_envoye and doc.mecef_qr_code %}
+<div style="margin-top:12px;border-top:1px solid #ccc;padding-top:8px;font-size:11px;">
+  <strong>Facture normalisée e-MECeF</strong><br>
+  Code : {{ doc.mecef_numero }}<br>
+  NIM : {{ doc.mecef_nim }}<br>
+  <img src="{{ mecef_qr_base64(doc.mecef_qr_code, 4) }}" alt="QR MECeF" style="width:120px;height:120px;margin-top:6px;" />
+</div>
+{% endif %}

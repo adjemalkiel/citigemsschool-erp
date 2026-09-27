@@ -1,0 +1,9 @@
+[
+ {
+  "doctype": "Mode of Payment",
+  "name": "Mobile Money",
+  "mode_of_payment": "Mobile Money",
+  "type": "Bank",
+  "enabled": 1
+ }
+]

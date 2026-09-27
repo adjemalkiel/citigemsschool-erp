@@ -1,0 +1,26 @@
+# Remote Docker host bind: path must exist on devops-docker (rsync apps/citigems_custom there).
+services:
+  backend:
+    volumes:
+      - /home/devopserp/citigemsschool-erp/apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  configurator:
+    volumes:
+      - /home/devopserp/citigemsschool-erp/apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  create-site:
+    volumes:
+      - /home/devopserp/citigemsschool-erp/apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  frontend:
+    volumes:
+      - /home/devopserp/citigemsschool-erp/apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  queue-long:
+    volumes:
+      - /home/devopserp/citigemsschool-erp/apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  queue-short:
+    volumes:
+      - /home/devopserp/citigemsschool-erp/apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  scheduler:
+    volumes:
+      - /home/devopserp/citigemsschool-erp/apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom
+  websocket:
+    volumes:
+      - /home/devopserp/citigemsschool-erp/apps/citigems_custom:/home/frappe/frappe-bench/apps/citigems_custom

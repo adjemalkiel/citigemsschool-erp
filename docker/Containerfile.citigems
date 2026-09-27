@@ -1,0 +1,27 @@
+# Citigems ERPNext v15 image — extend stock erpnext and bake apps from apps.json.
+# Prefer this on ~8GB hosts (avoids full bench init OOM).
+#
+# Build (from repo root):
+#   ./scripts/build.sh
+#
+# Full layered rebuild (more RAM): ./scripts/build.sh --layered
+
+ARG BASE_IMAGE=frappe/erpnext:v15
+FROM ${BASE_IMAGE}
+
+USER root
+RUN set -eux; \
+    apt-get update -qq; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
+      build-essential git pkg-config; \
+    rm -rf /var/lib/apt/lists/*
+
+USER frappe
+WORKDIR /home/frappe/frappe-bench
+
+COPY --chmod=755 resources/citigems-install-apps.sh /tmp/citigems-install-apps.sh
+
+RUN --mount=type=secret,id=apps_json,target=/opt/frappe/apps.json,uid=1000,gid=1000 \
+    JOBS=1 /tmp/citigems-install-apps.sh
+
+USER frappe

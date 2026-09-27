@@ -1,0 +1,135 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:company",
+ "creation": "2026-07-09 22:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "is_active",
+  "column_break_company",
+  "public_key",
+  "api_key",
+  "webhook_secret",
+  "environment",
+  "section_break_fees",
+  "customer_fee_percent",
+  "customer_fee_minimum",
+  "section_break_setup",
+  "webhook_url_help"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Active"
+  },
+  {
+   "fieldname": "column_break_company",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Clé publique FedaPay (pk_…). Réservée au client / SDK ; l'API serveur utilise la clé secrète.",
+   "fieldname": "public_key",
+   "fieldtype": "Password",
+   "label": "Public Key"
+  },
+  {
+   "description": "Clé secrète FedaPay (sk_…). Utilisée comme Bearer pour l'API.",
+   "fieldname": "api_key",
+   "fieldtype": "Password",
+   "label": "API Key",
+   "reqd": 1
+  },
+  {
+   "description": "Secret de signature webhook (souvent la clé secrète sandbox/live).",
+   "fieldname": "webhook_secret",
+   "fieldtype": "Password",
+   "label": "Webhook Secret"
+  },
+  {
+   "default": "Sandbox",
+   "fieldname": "environment",
+   "fieldtype": "Select",
+   "label": "Environment",
+   "options": "Sandbox\nLive",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_fees",
+   "fieldtype": "Section Break",
+   "label": "Frais client Mobile Money"
+  },
+  {
+   "default": "0",
+   "description": "Pourcentage ajoute au total facture pour le montant debite sur le telephone du client (ex. 1.5 pour 1,5 %).",
+   "fieldname": "customer_fee_percent",
+   "fieldtype": "Float",
+   "label": "Frais client (%)"
+  },
+  {
+   "default": "0",
+   "description": "Frais minimum facture au client lorsque le pourcentage est actif.",
+   "fieldname": "customer_fee_minimum",
+   "fieldtype": "Currency",
+   "label": "Frais minimum"
+  },
+  {
+   "fieldname": "section_break_setup",
+   "fieldtype": "Section Break",
+   "label": "Configuration"
+  },
+  {
+   "fieldname": "webhook_url_help",
+   "fieldtype": "Small Text",
+   "label": "Webhook URL",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 0,
+ "links": [],
+ "modified": "2026-07-13 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Citigems School",
+ "name": "FedaPay Settings",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Accounts Manager",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
