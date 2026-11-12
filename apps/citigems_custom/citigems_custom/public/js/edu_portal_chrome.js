@@ -202,7 +202,9 @@
 			logoutLabel +
 			'">' +
 			logoutIconSvg() +
-			"</a>";
+			'<span class="citigems-portal-bar__logout-label">' +
+			logoutLabel +
+			"</span></a>";
 
 		ensureBackdrop();
 		var menuBtn = document.getElementById("citigems-portal-menu");

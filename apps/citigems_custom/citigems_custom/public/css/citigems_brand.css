@@ -114,22 +114,41 @@ body:has(section.for-login) {
 	margin-left: auto;
 	font-family: var(--cg-font);
 	font-weight: 700;
-	font-size: 0.85rem;
+	font-size: 0.95rem;
 	letter-spacing: 0.04em;
+}
+/* Shared bar link metrics — same height + underline baseline (FR/EN, Home, Log out) */
+.citigems-login-bar__lang,
+.citigems-login-bar__accueil,
+.citigems-portal-bar__logout {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	min-height: 40px;
+	margin: 0;
+	padding: 0 0.35rem;
+	border: 0;
+	border-bottom: 2px solid transparent;
+	font-family: var(--cg-font);
+	font-weight: 700;
+	font-size: 0.95rem;
+	line-height: 1.2;
+	white-space: nowrap;
+	text-decoration: none !important;
+	color: #fff;
+	cursor: pointer;
 }
 .citigems-login-bar__lang {
 	appearance: none;
 	background: transparent;
-	border: 0;
+	min-width: 36px;
 	color: rgba(255, 255, 255, 0.7);
-	cursor: pointer;
-	padding: 0.15rem 0.2rem;
-	font: inherit;
-	font-weight: 700;
+	letter-spacing: 0.04em;
 }
 .citigems-login-bar__lang.is-active {
 	color: #fff;
-	border-bottom: 2px solid var(--cg-gold);
+	border-bottom-color: var(--cg-gold);
 }
 .citigems-login-bar__lang:hover {
 	color: var(--cg-gold);
@@ -141,12 +160,7 @@ body:has(section.for-login) {
 .citigems-login-bar__accueil {
 	margin-left: 0.85rem;
 	color: #fff !important;
-	font-weight: 700;
-	font-size: 0.95rem;
-	text-decoration: none !important;
-	border-bottom: 2px solid var(--cg-gold);
-	padding-bottom: 1px;
-	white-space: nowrap;
+	border-bottom-color: var(--cg-gold);
 }
 .citigems-login-bar__accueil:hover {
 	color: var(--cg-gold) !important;
@@ -154,35 +168,31 @@ body:has(section.for-login) {
 .citigems-portal-bar__logout {
 	margin-left: 0.75rem;
 	color: #fff !important;
-	text-decoration: none !important;
-	min-width: 40px;
-	min-height: 40px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	padding: 0.35rem;
-	border-radius: 8px;
+	border-bottom-color: var(--cg-gold);
+	border-radius: 0;
 	flex-shrink: 0;
+	gap: 0.4rem;
 	opacity: 0.95;
 }
 .citigems-portal-bar__logout:hover,
 .citigems-portal-bar__logout:focus-visible {
 	color: var(--cg-gold) !important;
-	background: rgba(255, 255, 255, 0.12);
+	background: transparent;
 	opacity: 1;
 	outline: none;
 }
 .citigems-portal-bar__logout svg {
-	display: block;
-	width: 22px;
-	height: 22px;
+	display: none; /* desktop: text only, like Home */
+	width: 20px;
+	height: 20px;
+	flex-shrink: 0;
 }
-.citigems-login-bar__lang {
-	min-height: 40px;
-	min-width: 36px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
+.citigems-portal-bar__logout-label {
+	line-height: inherit;
+}
+/* Drawer logout is for mobile overlay only — hide on desktop sidebar */
+.citigems-portal-drawer__logout {
+	display: none !important;
 }
 
 body:has(.login-content) .page-card,
@@ -1229,10 +1239,10 @@ body.citigems-edu-spa #app textarea:focus {
 		display: none !important;
 	}
 
-	/* Drawer logout footer */
+	/* Drawer logout footer (mobile only — desktop uses header label) */
 	.citigems-portal-drawer__logout {
 		appearance: none;
-		display: flex;
+		display: flex !important;
 		align-items: center;
 		gap: 0.65rem;
 		width: 100%;
@@ -1247,6 +1257,17 @@ body.citigems-edu-spa #app textarea:focus {
 		font-size: 0.95rem;
 		cursor: pointer;
 		text-align: left;
+	}
+	/* Compact header logout on small screens — icon only */
+	body.citigems-edu-spa .citigems-portal-bar__logout-label {
+		display: none;
+	}
+	body.citigems-edu-spa .citigems-portal-bar__logout {
+		min-width: 40px;
+		padding: 0.35rem;
+	}
+	body.citigems-edu-spa .citigems-portal-bar__logout svg {
+		display: block;
 	}
 	.citigems-portal-drawer__logout:hover,
 	.citigems-portal-drawer__logout:focus-visible {
