@@ -1,0 +1,218 @@
+
+<style>
+	/* Thermal 80mm: larger + bold + faux-bold shadow so dots read black, not grey. */
+	.print-format {
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 13px;
+		font-weight: 700;
+		color: #000 !important;
+		line-height: 1.25;
+		page-width: 80mm;
+		page-height: 297mm;
+		width: 100%;
+		max-width: 100%;
+		height: auto;
+		min-height: 0 !important;
+		box-sizing: border-box;
+		margin: 0 !important;
+		padding: 2mm 2.5mm !important;
+		overflow: visible;
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+		-webkit-font-smoothing: none;
+		text-shadow: 0.35px 0 0 #000, -0.35px 0 0 #000;
+	}
+	@media screen {
+		.print-format {
+			width: 80mm;
+			max-width: 80mm;
+			padding: 2mm 2.5mm !important;
+			margin: 0 auto !important;
+			background: #fff;
+			min-height: 0 !important;
+			height: auto !important;
+			box-shadow: 0 0 6px rgba(0,0,0,.12);
+		}
+	}
+	@media print {
+		@page { size: 80mm auto; margin: 0; }
+		html, body {
+			width: 100% !important;
+			max-width: 100% !important;
+			height: auto !important;
+			min-height: 0 !important;
+			margin: 0 !important;
+			padding: 0 !important;
+			background: #fff !important;
+			color: #000 !important;
+		}
+		.print-format-gutter,
+		.print-format {
+			width: 100% !important;
+			max-width: 100% !important;
+			margin: 0 !important;
+			padding: 1.5mm 2mm !important;
+			box-shadow: none !important;
+			box-sizing: border-box !important;
+			color: #000 !important;
+		}
+	}
+	.print-format * { box-sizing: border-box; color: #000 !important; }
+	.rc-wrap { width: 100%; max-width: 100%; margin: 0 auto; }
+	.rc-center { text-align: center; }
+	.rc-bold { font-weight: 900; }
+	.rc-shop {
+		font-size: 18px; font-weight: 900; margin: 0 0 2px 0;
+		letter-spacing: 0.5px; text-transform: uppercase;
+	}
+	.rc-line { margin: 0; padding: 0; font-size: 12px; font-weight: 700; }
+	.rc-sep { border: 0; border-top: 2px dashed #000; margin: 3px 0; }
+	.rc-title {
+		font-size: 14px; font-weight: 900; letter-spacing: 0.4px;
+		margin: 2px 0 3px 0; text-transform: uppercase;
+	}
+	.rc-meta {
+		width: 100%; border-collapse: collapse; border-spacing: 0;
+		font-size: 12px; line-height: 1.25; font-weight: 700;
+	}
+	.rc-meta tr { height: auto !important; line-height: 1.25 !important; }
+	.rc-meta td {
+		padding: 1px 0 !important; margin: 0 !important;
+		vertical-align: baseline !important; line-height: 1.25 !important;
+		height: auto !important; border: 0 !important;
+		font-weight: 700;
+	}
+	.rc-meta .lbl {
+		width: 1%; white-space: nowrap;
+		padding-right: 4px !important;
+	}
+	.rc-items { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+	.rc-items th, .rc-items td {
+		padding: 2px 0; vertical-align: top; font-weight: 700;
+	}
+	.rc-items th { font-weight: 900; text-transform: uppercase; font-size: 11px; }
+	.rc-col-des { width: 42%; text-align: left; word-wrap: break-word; }
+	.rc-col-qty { width: 12%; text-align: center; }
+	.rc-col-pu  { width: 23%; text-align: right; }
+	.rc-col-mt  { width: 23%; text-align: right; }
+	.rc-total { width: 100%; border-collapse: collapse; font-size: 14px; }
+	.rc-total td { padding: 2px 0; font-weight: 900; }
+	.rc-total .amt { text-align: right; white-space: nowrap; }
+	.rc-gift { width: 100%; border-collapse: collapse; font-size: 12px; font-weight: 700; }
+	.rc-gift td { padding: 1px 0; }
+	.rc-gift .g-qty { text-align: right; white-space: nowrap; }
+	.rc-thanks { margin: 5px 0 1px 0; font-size: 12px; font-weight: 700; }
+</style>
+
+{%- macro money(v) -%}
+{%- set n = frappe.utils.flt(frappe.utils.flt(v or 0), 0) -%}
+{{- "{:,.0f}".format(n).replace(",", " ") -}}
+{%- endmacro -%}
+
+{%- macro qty(v) -%}
+{%- set n = frappe.utils.flt(v or 0) -%}
+{%- if n == frappe.utils.flt(n|int) -%}{{- n|int -}}{%- else -%}{{- n -}}{%- endif -%}
+{%- endmacro -%}
+
+{%- set total = frappe.utils.flt(doc.rounded_total if doc.rounded_total is not none else doc.grand_total) -%}
+{%- set phone = frappe.db.get_value("Company", doc.company, "phone_no") if doc.company else None -%}
+{%- set gift_rows = [] -%}
+{%- set sale_rows = [] -%}
+{%- for row in doc.items -%}
+	{%- if row.item_group == "Cadeaux clients" or (row.item_code or "")[:7] == "STO-CD-" -%}
+		{%- set _ = gift_rows.append(row) -%}
+	{%- elif row.item_group == "Emballages & accessoires" or (row.item_code or "")[:7] == "STO-EM-" -%}
+		{%- set _ = gift_rows.append(row) -%}
+	{%- elif frappe.utils.flt(row.rate) == 0 -%}
+		{%- set _ = gift_rows.append(row) -%}
+	{%- else -%}
+		{%- set _ = sale_rows.append(row) -%}
+	{%- endif -%}
+{%- endfor -%}
+{%- if sale_rows|length == 0 -%}
+	{%- set sale_rows = doc.items -%}
+	{%- set gift_rows = [] -%}
+{%- endif -%}
+{%- set mode_parts = [] -%}
+{%- for p in (doc.payments or []) -%}
+	{%- if frappe.utils.flt(p.amount) > 0 -%}
+		{%- set _ = mode_parts.append(p.mode_of_payment) -%}
+	{%- endif -%}
+{%- endfor -%}
+{%- set d = frappe.utils.getdate(doc.posting_date) -%}
+{%- set date_str = "{:02d}/{:02d}/{:04d}".format(d.day, d.month, d.year) -%}
+{%- if doc.posting_time -%}
+	{%- set t = frappe.utils.get_time(doc.posting_time) -%}
+	{%- set date_str = date_str + " {:02d}:{:02d}".format(t.hour, t.minute) -%}
+{%- endif -%}
+
+<div class="rc-wrap">
+	<div class="rc-center">
+		<p class="rc-shop">TS SHOWROOM</p>
+		<p class="rc-line">Agla Agongbomey</p>
+		<p class="rc-line">Cotonou, Bénin</p>
+		{%- if phone -%}<p class="rc-line">Tel: {{ phone }}</p>{%- endif -%}
+	</div>
+
+	<hr class="rc-sep">
+	<p class="rc-center rc-title">RECU DE CAISSE</p>
+
+	<table class="rc-meta">
+		<tr><td class="lbl">N° Recu :</td><td>{{ doc.name }}</td></tr>
+		<tr><td class="lbl">Date :</td><td>{{ date_str }}</td></tr>
+		<tr><td class="lbl">Client :</td><td>{{ doc.customer_name or doc.customer or "Client Passage" }}</td></tr>
+		{%- if mode_parts -%}
+		<tr><td class="lbl">Paiement :</td><td>{{ mode_parts | join(", ") }}</td></tr>
+		{%- endif -%}
+	</table>
+
+	<hr class="rc-sep">
+	<table class="rc-items">
+		<thead>
+			<tr>
+				<th class="rc-col-des">DESIGNATION</th>
+				<th class="rc-col-qty">QTE</th>
+				<th class="rc-col-pu">PU</th>
+				<th class="rc-col-mt">MONTANT</th>
+			</tr>
+		</thead>
+	</table>
+	<hr class="rc-sep" style="margin-top:2px;margin-bottom:2px;">
+	<table class="rc-items">
+		<tbody>
+		{%- for row in sale_rows -%}
+			<tr>
+				<td class="rc-col-des">{{ row.item_name or row.item_code }}</td>
+				<td class="rc-col-qty">{{ qty(row.qty) }}</td>
+				<td class="rc-col-pu">{{ money(row.rate) }}</td>
+				<td class="rc-col-mt">{{ money(row.amount) }}</td>
+			</tr>
+		{%- endfor -%}
+		</tbody>
+	</table>
+
+	<hr class="rc-sep">
+	<table class="rc-total">
+		<tr>
+			<td>TOTAL TTC</td>
+			<td class="amt">{{ money(total) }} FCFA</td>
+		</tr>
+	</table>
+
+	{%- if gift_rows -%}
+	<hr class="rc-sep">
+	<p class="rc-center rc-bold" style="margin:2px 0;">CADEAUX OFFERTS</p>
+	<hr class="rc-sep" style="margin-top:2px;margin-bottom:2px;">
+	<table class="rc-gift">
+		{%- for row in gift_rows -%}
+		<tr>
+			<td>{{ row.item_name or row.item_code }}</td>
+			<td class="g-qty">x{{ qty(row.qty) }} offert</td>
+		</tr>
+		{%- endfor -%}
+	</table>
+	{%- endif -%}
+
+	<hr class="rc-sep">
+	<p class="rc-center rc-thanks">Merci de votre visite.</p>
+</div>

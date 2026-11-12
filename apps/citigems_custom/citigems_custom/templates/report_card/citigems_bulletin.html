@@ -1,0 +1,185 @@
+{# Citigems Continuous Assessment / Nursery Report Booklet — matches school PDF #}
+<style>
+	@page { size: A4 landscape; margin: 6mm; }
+	.cg-b { font-family: Arial, Helvetica, sans-serif; font-size: 7.5pt; color: #000; }
+	.cg-b * { box-sizing: border-box; }
+	.cg-head { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+	.cg-head td { vertical-align: middle; }
+	.cg-head img { max-height: 32px; margin-right: 6px; vertical-align: middle; }
+	.cg-school { font-size: 12pt; font-weight: 700; letter-spacing: 0.04em; }
+	.cg-school small { display: block; font-size: 6.5pt; font-weight: 400; }
+	.cg-title-block { text-align: right; }
+	.cg-title-block .line1 { font-weight: 700; font-size: 9pt; text-transform: uppercase; }
+	.cg-pill {
+		display: inline-block; background: #000; color: #fff;
+		padding: 2px 10px; font-weight: 700; font-size: 8pt; margin-top: 2px;
+	}
+	.cg-info { width: 100%; border-collapse: collapse; margin: 3px 0 5px; font-size: 7pt; }
+	.cg-info td { padding: 1px 3px; border-bottom: 1px solid #999; }
+	.cg-info .l { color: #222; font-size: 6.5pt; text-transform: uppercase; white-space: nowrap; width: 13%; }
+	.cg-info .v { font-weight: 700; width: 20%; }
+	.cg-grid { width: 100%; }
+	.cg-grid > tbody > tr > td { vertical-align: top; }
+	.cg-sec {
+		font-size: 7.5pt; font-weight: 700; text-transform: uppercase;
+		background: #000; color: #fff; padding: 2px 6px; margin: 0 0 2px;
+	}
+	.cg-t { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7pt; }
+	.cg-t th, .cg-t td { border: 1px solid #000; padding: 1px 2px; }
+	.cg-t th { background: #dcdcdc; text-align: center; font-size: 6.5pt; font-weight: 700; }
+	.cg-t td.n { text-align: center; }
+	.cg-t td.s { text-align: left; font-weight: 600; }
+	.cg-t tr.section td { background: #333; color: #fff; font-weight: 700; text-align: left; letter-spacing: 0.06em; }
+	.cg-t tfoot td { font-weight: 700; background: #efefef; }
+	.cg-mini { width: 100%; border-collapse: collapse; font-size: 6.5pt; }
+	.cg-mini th, .cg-mini td { border: 1px solid #000; padding: 1px 2px; }
+	.cg-mini th { background: #dcdcdc; }
+	.cg-scale { font-size: 6pt; margin: 0 0 2px; }
+	.cg-bottom { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 7pt; }
+	.cg-bottom td { width: 33%; vertical-align: top; padding: 0 5px; }
+	.cg-bottom .box { border: 1px solid #000; min-height: 24px; margin-top: 2px; padding: 2px; }
+	.cg-bottom .sig { border-top: 1px solid #000; margin-top: 14px; padding-top: 1px; }
+</style>
+
+<div class="cg-b">
+	<table class="cg-head">
+		<tr>
+			<td style="width:58%">
+				{% if logo_url %}<img src="{{ logo_url }}" alt="">{% endif %}
+				<span class="cg-school">CITIGEMS SCHOOLS
+					<small>{{ school_address }} · TEL: {{ school_phones }} · {{ school_web }}</small>
+				</span>
+			</td>
+			<td class="cg-title-block" style="width:42%">
+				<div class="line1">{{ booklet_subtitle }}</div>
+				<span class="cg-pill">{{ booklet_title }}</span>
+			</td>
+		</tr>
+	</table>
+
+	<table class="cg-info">
+		<tr>
+			<td class="l">Name of Pupil</td><td class="v">{{ doc.student_name }}</td>
+			<td class="l">Class</td><td class="v">{{ doc.student_batch or doc.program }}</td>
+			<td class="l">Session</td><td class="v">{{ doc.academic_year }}{% if doc.academic_term %} — {{ doc.academic_term }}{% endif %}</td>
+		</tr>
+		<tr>
+			<td class="l">Admission No</td><td class="v">{{ admission_no }}</td>
+			<td class="l">Age</td><td class="v">{{ age or "—" }}</td>
+			<td class="l">Next Term Begins</td><td class="v">{{ next_term_begins or "—" }}</td>
+		</tr>
+		<tr>
+			<td class="l">Times School Opened</td><td class="v">{{ attendance.total or 0 }}</td>
+			<td class="l">Times Present</td><td class="v">{{ attendance.present or 0 }}</td>
+			<td class="l">No. of Pupils in Class</td><td class="v">{{ pupils_in_class or "—" }}</td>
+		</tr>
+	</table>
+
+	<table class="cg-grid">
+		<tr>
+			<td style="width:{% if psychomotor_rows or affective_rows %}68%{% else %}100%{% endif %}; padding-right:4px">
+				<div class="cg-sec">1. Cognitive Ability</div>
+				{% if cognitive_rows %}
+				<table class="cg-t">
+					<thead>
+						<tr>
+							<th style="width:22%">Subjects</th>
+							<th style="width:9%">Marks Obtainable</th>
+							{% for col in cognitive_columns %}
+							<th>{{ col.label }}</th>
+							{% endfor %}
+							<th style="width:9%">Total Scores</th>
+							<th style="width:8%">Class Avg Mark</th>
+							<th style="width:7%">Position</th>
+							<th style="width:8%">Remarks</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for row in cognitive_rows %}
+						{% if row.is_section %}
+						<tr class="section"><td colspan="{{ 5 + cognitive_columns|length }}">{{ row.course_name }}</td></tr>
+						{% else %}
+						<tr>
+							<td class="s">{{ row.course_name }}</td>
+							<td class="n">{{ row.max_score }}</td>
+							{% for col in cognitive_columns %}
+							<td class="n">{{ row.scores.get(col.key, "") }}</td>
+							{% endfor %}
+							<td class="n">{{ row.total }}</td>
+							<td class="n">{{ row.class_avg }}</td>
+							<td class="n">{{ row.position }}</td>
+							<td class="n">{{ row.grade }}</td>
+						</tr>
+						{% endif %}
+						{% endfor %}
+					</tbody>
+					{% if cognitive_totals %}
+					<tfoot>
+						<tr>
+							<td class="s">TOTAL SCORE / PERCENTAGE</td>
+							<td class="n"></td>
+							{% for col in cognitive_columns %}
+							<td class="n">{{ cognitive_totals.by_col.get(col.key, "") }}</td>
+							{% endfor %}
+							<td class="n">{{ cognitive_totals.total }}</td>
+							<td class="n" colspan="2">{% if cognitive_totals.percent %}{{ cognitive_totals.percent }}%{% endif %}</td>
+							<td class="n"></td>
+						</tr>
+					</tfoot>
+					{% endif %}
+				</table>
+				{% else %}
+				<p><em>No cognitive scores for these filters.</em></p>
+				{% endif %}
+			</td>
+			{% if psychomotor_rows or affective_rows %}
+			<td style="width:32%; padding-left:4px">
+				{% if psychomotor_rows %}
+				<div class="cg-sec">B. Psychomotor Skills</div>
+				<p class="cg-scale">5 Excellent · 4 Very Good · 3 Good · 2 Fair · 1 Poor</p>
+				<table class="cg-mini">
+					<thead><tr><th>Skill</th><th>1–5</th><th>Grade</th></tr></thead>
+					<tbody>
+					{% for row in psychomotor_rows %}
+						<tr><td>{{ row.course_name }}</td><td style="text-align:center">{{ row.score }}</td><td style="text-align:center">{{ row.grade }}</td></tr>
+					{% endfor %}
+					</tbody>
+				</table>
+				{% endif %}
+				{% if affective_rows %}
+				<div class="cg-sec" style="margin-top:4px">C. Affective Areas</div>
+				<p class="cg-scale">5 Excellent · 4 Very Good · 3 Good · 2 Fair · 1 Poor</p>
+				<table class="cg-mini">
+					<thead><tr><th>Trait</th><th>1–5</th><th>Grade</th></tr></thead>
+					<tbody>
+					{% for row in affective_rows %}
+						<tr><td>{{ row.course_name }}</td><td style="text-align:center">{{ row.score }}</td><td style="text-align:center">{{ row.grade }}</td></tr>
+					{% endfor %}
+					</tbody>
+				</table>
+				{% endif %}
+			</td>
+			{% endif %}
+		</tr>
+	</table>
+
+	<table class="cg-bottom">
+		<tr>
+			<td>
+				<strong>CLASS TEACHER REMARKS</strong>
+				<div class="box"></div>
+				<div class="sig">Signature</div>
+			</td>
+			<td>
+				<strong>HEADMISTRESS REMARKS</strong>
+				<div class="box"></div>
+				<div class="sig">Signature</div>
+			</td>
+			<td>
+				<strong>PARENT RESPONSE</strong>
+				<div class="box"></div>
+				<div class="sig">Name &amp; signature</div>
+			</td>
+		</tr>
+	</table>
+</div>

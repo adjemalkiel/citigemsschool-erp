@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Build citigems/erpnext:15
-# Default: lightweight extend of frappe/erpnext:v15 (safer on ~8GB RAM).
+# Build citigems/erpnext:16
+# Default: lightweight extend of frappe/erpnext:v16 (safer on ~8GB RAM).
 #   ./scripts/build.sh
 # Full layered bench init (needs more RAM; reduce parallelism if OOM):
 #   ./scripts/build.sh --layered
@@ -37,31 +37,31 @@ echo "APPS_JSON_BASE64 written to apps.json.b64 (gitignored)"
 
 # shellcheck disable=SC1090
 set -a; source "${ENV_FILE}"; set +a
-IMAGE="${CUSTOM_IMAGE:-citigems/erpnext}:${CUSTOM_TAG:-15}"
+IMAGE="${CUSTOM_IMAGE:-citigems/erpnext}:${CUSTOM_TAG:-16}"
 
 # Reduce BuildKit / yarn parallelism on small hosts
 export DOCKER_BUILDKIT=1
 export BUILDKIT_STEP_LOG_MAX_SIZE=10485760
 
 if [[ "${LAYERED}" -eq 1 ]]; then
-  echo "Building LAYERED image ${IMAGE} (FRAPPE_BRANCH=version-15) ..."
+  echo "Building LAYERED image ${IMAGE} (FRAPPE_BRANCH=version-16) ..."
   echo "If the build OOMs, re-run without --layered (default extend build) or close other apps."
   docker build \
     "${NO_CACHE[@]}" \
     --build-arg=FRAPPE_PATH=https://github.com/frappe/frappe \
-    --build-arg=FRAPPE_BRANCH=version-15 \
+    --build-arg=FRAPPE_BRANCH=version-16 \
     --build-arg=FRAPPE_IMAGE_PREFIX=frappe \
     --secret=id=apps_json,src="${APPS_JSON}" \
     --tag="${IMAGE}" \
     --file="${DOCKER_DIR}/images/layered/Containerfile" \
     "${DOCKER_DIR}"
 else
-  echo "Building lightweight (extend) image ${IMAGE} from frappe/erpnext:v15 ..."
+  echo "Building lightweight (extend) image ${IMAGE} from frappe/erpnext:v16 ..."
   # Ensure base is present
-  docker pull frappe/erpnext:v15
+  docker pull frappe/erpnext:v16
   docker build \
     "${NO_CACHE[@]}" \
-    --build-arg=BASE_IMAGE=frappe/erpnext:v15 \
+    --build-arg=BASE_IMAGE=frappe/erpnext:v16 \
     --secret=id=apps_json,src="${APPS_JSON}" \
     --tag="${IMAGE}" \
     --file="${DOCKER_DIR}/Containerfile.citigems" \

@@ -1,18 +1,1521 @@
-/* Citigems School — Powered by DevOps chrome */
+/* Citigems shared brand tokens — parity with public site (red #ED1C24 / gold #FCDA1E).
+   Fonts loaded from branding.update_website_context (avoid @import cache quirks). */
+
+:root {
+	--cg-red: #ed1c24;
+	--cg-red-soft: #fdecec;
+	--cg-gold: #fcda1e;
+	--cg-gold-hover: #f0c800;
+	--cg-ink: #1a1a1a;
+	--cg-muted: #5a5a5a;
+	--cg-accent: var(--cg-red);
+	--cg-accent-hot: var(--cg-red);
+	--cg-bg: #f7f7f8;
+	--cg-font: "Quicksand", "Segoe UI", sans-serif;
+	--cg-display: "Baloo 2", "Quicksand", sans-serif;
+	--cg-radius: 14px;
+	--cg-shadow: 0 12px 40px rgba(237, 28, 36, 0.12);
+}
+
+/* Powered by DevOps chrome (viewport footer, not mid-page).
+   Desk .main-section is position:absolute / full viewport, so a normal-flow
+   body child paints at top=0 — must be fixed to the viewport bottom. */
 .citigems-powered-by {
+	position: fixed !important;
+	top: auto !important;
+	left: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
+	width: 100% !important;
+	height: auto !important;
+	z-index: 100;
+	margin: 0 !important;
+	padding: 6px 12px;
 	text-align: center;
 	font-size: 12px;
+	line-height: 1.3;
 	opacity: 0.75;
-	padding: 8px 0;
 	color: var(--text-muted, #6c757d);
+	background: transparent;
+	pointer-events: none;
+	box-sizing: border-box;
 }
 .citigems-powered-by a {
 	color: inherit;
 	text-decoration: none;
 	font-weight: 600;
+	pointer-events: auto;
 }
-/* Login splash: keep DevOps mark readable */
+.for-login .citigems-powered-by,
+.login-content .citigems-powered-by {
+	position: static !important;
+	pointer-events: auto;
+	opacity: 0.85;
+	padding-top: 0.5rem;
+}
+
+/* ── Login / signup / forgot (public-site chrome) ───────────────── */
+body:has(.login-content),
+body:has(section.for-login) {
+	font-family: var(--cg-font) !important;
+	color: var(--cg-ink);
+	background:
+		radial-gradient(ellipse 80% 50% at 50% -10%, rgba(237, 28, 36, 0.18), transparent 55%),
+		radial-gradient(ellipse 60% 40% at 100% 100%, rgba(252, 218, 30, 0.22), transparent 50%),
+		var(--cg-bg) !important;
+	min-height: 100vh;
+}
+
+.citigems-login-bar {
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.65rem 1.25rem;
+	padding-top: max(0.65rem, env(safe-area-inset-top, 0px));
+	padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+	padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+	background: var(--cg-red);
+	color: #fff;
+	box-shadow: 0 4px 18px rgba(237, 28, 36, 0.35);
+}
+.citigems-login-bar__plate {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: #fff;
+	border-radius: 10px;
+	padding: 0.35rem 0.55rem;
+	line-height: 0;
+	flex-shrink: 0;
+}
+.citigems-login-bar__plate img {
+	height: 40px;
+	width: auto;
+	display: block;
+}
+.citigems-login-bar__name {
+	font-family: var(--cg-display);
+	font-weight: 700;
+	font-size: 1.15rem;
+	letter-spacing: 0.01em;
+	flex: 1;
+	min-width: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.citigems-login-bar__langs {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	margin-left: auto;
+	font-family: var(--cg-font);
+	font-weight: 700;
+	font-size: 0.85rem;
+	letter-spacing: 0.04em;
+}
+.citigems-login-bar__lang {
+	appearance: none;
+	background: transparent;
+	border: 0;
+	color: rgba(255, 255, 255, 0.7);
+	cursor: pointer;
+	padding: 0.15rem 0.2rem;
+	font: inherit;
+	font-weight: 700;
+}
+.citigems-login-bar__lang.is-active {
+	color: #fff;
+	border-bottom: 2px solid var(--cg-gold);
+}
+.citigems-login-bar__lang:hover {
+	color: var(--cg-gold);
+}
+.citigems-login-bar__lang-sep {
+	opacity: 0.55;
+	user-select: none;
+}
+.citigems-login-bar__accueil {
+	margin-left: 0.85rem;
+	color: #fff !important;
+	font-weight: 700;
+	font-size: 0.95rem;
+	text-decoration: none !important;
+	border-bottom: 2px solid var(--cg-gold);
+	padding-bottom: 1px;
+	white-space: nowrap;
+}
+.citigems-login-bar__accueil:hover {
+	color: var(--cg-gold) !important;
+}
+.citigems-portal-bar__logout {
+	margin-left: 0.75rem;
+	color: #fff !important;
+	text-decoration: none !important;
+	min-width: 40px;
+	min-height: 40px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.35rem;
+	border-radius: 8px;
+	flex-shrink: 0;
+	opacity: 0.95;
+}
+.citigems-portal-bar__logout:hover,
+.citigems-portal-bar__logout:focus-visible {
+	color: var(--cg-gold) !important;
+	background: rgba(255, 255, 255, 0.12);
+	opacity: 1;
+	outline: none;
+}
+.citigems-portal-bar__logout svg {
+	display: block;
+	width: 22px;
+	height: 22px;
+}
+.citigems-login-bar__lang {
+	min-height: 40px;
+	min-width: 36px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+body:has(.login-content) .page-card,
+body:has(section.for-login) .page-card,
+.for-login .page-card,
+.for-login .login-content.page-card,
+section.for-login .login-content,
+section.for-forgot .login-content,
+section.for-signup .login-content,
+section.for-login-with-email-link .login-content,
+section.for-email-login .login-content {
+	font-family: var(--cg-font);
+	background: #fff !important;
+	border-radius: var(--cg-radius) !important;
+	border: 1px solid rgba(26, 26, 26, 0.06) !important;
+	box-shadow: var(--cg-shadow) !important;
+	padding: 1.75rem 1.5rem !important;
+}
+
+.for-login .page-card-head,
+.login-content .page-card-head {
+	align-items: center !important;
+	text-align: center;
+}
 .for-login .page-card-head img,
-.login-content .app-logo {
-	max-height: 64px;
+.login-content .app-logo,
+.page-card-head .app-logo {
+	max-height: 88px !important;
+	width: auto !important;
+	margin: 0 auto;
+}
+.for-login .page-card-head h4,
+.for-login .page-card-head .page-card-title,
+.login-content .page-card-head h4,
+.page-card-head .text-3xl-bold {
+	font-family: var(--cg-display) !important;
+	color: var(--cg-ink) !important;
+	font-weight: 800 !important;
+	text-align: center;
+}
+.page-card-subtitle,
+.page-card-head-text p {
+	color: var(--cg-muted) !important;
+	text-align: center;
+}
+
+/* Inputs — 16px floors iOS zoom */
+body:has(.login-content) .form-control,
+.for-login .form-control,
+.login-content .form-control,
+body:has(.login-content) input[type="text"],
+body:has(.login-content) input[type="email"],
+body:has(.login-content) input[type="password"],
+.for-login input.form-control,
+.login-content input.form-control {
+	border-radius: 10px !important;
+	border-color: #e2e2e2 !important;
+	font-family: var(--cg-font) !important;
+	font-size: 16px !important;
+}
+body:has(.login-content) .form-control:focus,
+.for-login .form-control:focus,
+.login-content .form-control:focus {
+	border-color: var(--cg-red) !important;
+	box-shadow: 0 0 0 3px rgba(237, 28, 36, 0.18) !important;
+}
+
+/* Primary CTA — match public “Demander une inscription” red */
+body:has(.login-content) .es-button[data-variant="solid"],
+.for-login .es-button[data-variant="solid"],
+.for-forgot .es-button[data-variant="solid"],
+.for-signup .es-button[data-variant="solid"],
+.for-login-with-email-link .es-button[data-variant="solid"],
+.for-email-login .es-button[data-variant="solid"],
+.for-login .btn-primary,
+.for-login button.btn-login,
+.login-content .btn-primary {
+	background: var(--cg-red) !important;
+	border-color: var(--cg-red) !important;
+	color: #fff !important;
+	font-family: var(--cg-font) !important;
+	font-weight: 700 !important;
+	border-radius: 999px !important;
+	box-shadow: 0 6px 16px rgba(237, 28, 36, 0.28);
+}
+body:has(.login-content) .es-button[data-variant="solid"]:hover,
+.for-login .es-button[data-variant="solid"]:hover,
+.for-forgot .es-button[data-variant="solid"]:hover,
+.login-content .btn-primary:hover {
+	background: #d41820 !important;
+	border-color: #d41820 !important;
+	filter: none;
+}
+
+/* Secondary / outline actions → soft gold wash */
+body:has(.login-content) .es-button:not([data-variant="solid"]),
+.for-login .btn-login-option,
+.for-login a.es-button.btn-login-option {
+	background: var(--cg-red-soft) !important;
+	color: var(--cg-red) !important;
+	border: 1px solid transparent !important;
+	font-weight: 700 !important;
+	border-radius: 999px !important;
+}
+body:has(.login-content) .es-button:not([data-variant="solid"]):hover,
+.for-login .btn-login-option:hover {
+	background: #fff !important;
+	border-color: var(--cg-gold) !important;
+	color: var(--cg-ink) !important;
+}
+
+.for-login a:not(.btn):not(.es-button):not(.citigems-login-bar__accueil),
+.login-content a:not(.btn):not(.es-button) {
+	color: var(--cg-red) !important;
+	font-weight: 600;
+}
+.for-login a:not(.btn):not(.es-button):hover,
+.login-content a:not(.btn):not(.es-button):hover {
+	color: #b8141a !important;
+}
+
+/* Legacy Accueil under logo (kept if injected into card head) */
+.for-login .citigems-accueil {
+	display: inline-block;
+	margin: 0.5rem auto 0;
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: var(--cg-ink) !important;
+	text-decoration: none;
+	border-bottom: 2px solid var(--cg-gold);
+}
+.for-login .citigems-accueil:hover {
+	color: var(--cg-red) !important;
+}
+
+/* Mute desk theme dock on login */
+body:has(.login-content) #devops-desk-theme-dock,
+body:has(section.for-login) #devops-desk-theme-dock,
+.for-login #devops-desk-theme-dock {
+	display: none !important;
+}
+
+/* Space for sticky brand bar */
+body:has(.citigems-login-bar) .page_content,
+body:has(.citigems-login-bar) main,
+body:has(.citigems-login-bar) .web-page-content {
+	padding-top: 0.5rem;
+}
+
+/* ── Edu portal (same chrome as login / public site) ─────────────── */
+body.citigems-portal {
+	margin: 0;
+	min-height: 100vh;
+	font-family: var(--cg-font);
+	color: var(--cg-ink);
+	background:
+		radial-gradient(ellipse 80% 50% at 50% -10%, rgba(237, 28, 36, 0.18), transparent 55%),
+		radial-gradient(ellipse 60% 40% at 100% 100%, rgba(252, 218, 30, 0.22), transparent 50%),
+		var(--cg-bg);
+	display: flex;
+	flex-direction: column;
+}
+.citigems-portal__bar .citigems-login-bar__langs {
+	margin-left: auto;
+}
+.citigems-portal__logout {
+	margin-left: 0.75rem;
+	color: #fff !important;
+	font-weight: 700;
+	font-size: 0.9rem;
+	text-decoration: none !important;
+	opacity: 0.9;
+	white-space: nowrap;
+}
+.citigems-portal__logout:hover {
+	color: var(--cg-gold) !important;
+	opacity: 1;
+}
+.citigems-portal__hero {
+	max-width: 720px;
+	width: 100%;
+	margin: 1.75rem auto 0.5rem;
+	padding: 0 1.25rem;
+	box-sizing: border-box;
+}
+.citigems-portal__eyebrow {
+	margin: 0 0 0.35rem;
+	font-size: 0.85rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--cg-red);
+}
+.citigems-portal__hero h1 {
+	margin: 0;
+	font-family: var(--cg-display);
+	font-weight: 800;
+	font-size: clamp(1.35rem, 3vw, 1.85rem);
+	line-height: 1.25;
+	color: var(--cg-ink);
+}
+.citigems-portal__main {
+	flex: 1;
+	max-width: 720px;
+	width: 100%;
+	margin: 0 auto;
+	padding: 0.75rem 1.25rem 4.5rem;
+	box-sizing: border-box;
+}
+.citigems-portal__card {
+	background: #fff;
+	border-radius: var(--cg-radius);
+	border: 1px solid rgba(26, 26, 26, 0.06);
+	box-shadow: var(--cg-shadow);
+	padding: 1.5rem 1.35rem;
+	margin-bottom: 1rem;
+}
+.citigems-portal__card h2 {
+	margin: 0 0 0.85rem;
+	font-family: var(--cg-display);
+	font-weight: 800;
+	font-size: 1.25rem;
+}
+.citigems-portal__muted {
+	color: var(--cg-muted);
+	margin: 0.35rem 0 0;
+	line-height: 1.45;
+}
+.citigems-portal__empty {
+	text-align: center;
+	padding: 1.25rem 0.5rem 0.5rem;
+}
+.citigems-portal__empty strong {
+	font-family: var(--cg-display);
+	font-size: 1.1rem;
+}
+.citigems-portal__fee {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem 1rem;
+	padding: 0.85rem 0;
+	border-top: 1px solid rgba(26, 26, 26, 0.08);
+}
+.citigems-portal__fee:first-of-type {
+	border-top: 0;
+	padding-top: 0;
+}
+.citigems-portal__fee-meta {
+	flex: 1;
+	min-width: 140px;
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+}
+.citigems-portal__fee-meta span {
+	font-size: 0.9rem;
+	color: var(--cg-muted);
+}
+.citigems-portal__amount {
+	font-weight: 700;
+	font-size: 1.05rem;
+	white-space: nowrap;
+}
+.citigems-portal__invoice {
+	font-weight: 700;
+	margin: 0 0 1rem;
+}
+.citigems-portal__form label {
+	display: block;
+	font-weight: 600;
+	font-size: 0.9rem;
+	margin: 0.65rem 0 0.3rem;
+}
+.citigems-portal__form select,
+.citigems-portal__form input {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0.65rem 0.75rem;
+	border-radius: 10px;
+	border: 1px solid #e2e2e2;
+	font-family: var(--cg-font);
+	font-size: 1rem;
+}
+.citigems-portal__form select:focus,
+.citigems-portal__form input:focus {
+	outline: none;
+	border-color: var(--cg-red);
+	box-shadow: 0 0 0 3px rgba(237, 28, 36, 0.18);
+}
+.citigems-portal__actions {
+	margin: 1.15rem 0 0;
+}
+.citigems-portal__btn {
+	display: inline-block;
+	appearance: none;
+	border: 0;
+	cursor: pointer;
+	background: var(--cg-red);
+	color: #fff !important;
+	font-family: var(--cg-font);
+	font-weight: 700;
+	font-size: 0.95rem;
+	padding: 0.7rem 1.35rem;
+	border-radius: 999px;
+	text-decoration: none !important;
+	box-shadow: 0 6px 16px rgba(237, 28, 36, 0.28);
+}
+.citigems-portal__btn:hover {
+	background: #d41820;
+}
+.citigems-portal__btn:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
+.citigems-portal__btn--sm {
+	padding: 0.45rem 1rem;
+	font-size: 0.85rem;
+	box-shadow: 0 3px 10px rgba(237, 28, 36, 0.22);
+}
+.citigems-portal__status {
+	min-height: 1.25rem;
+	margin: 0.65rem 0 0;
+	font-size: 0.9rem;
+}
+.citigems-portal__status.is-ok {
+	color: #1b7a3d;
+	font-weight: 600;
+}
+.citigems-portal__status.is-err {
+	color: var(--cg-red);
+	font-weight: 600;
+}
+.citigems-portal__footer {
+	position: static !important;
+	opacity: 0.85;
+	padding: 1rem 12px 1.25rem !important;
+	pointer-events: auto;
+}
+.citigems-portal__child-name {
+	margin: 0;
+	font-family: var(--cg-display);
+	font-weight: 800;
+	font-size: 1.2rem;
+}
+.citigems-portal__select {
+	width: 100%;
+	padding: 0.65rem 0.75rem;
+	border-radius: 10px;
+	border: 1px solid #e2e2e2;
+	font-family: var(--cg-font);
+	font-size: 1rem;
+}
+.citigems-portal__dl {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+	gap: 0.75rem 1rem;
+	margin: 0.75rem 0 0;
+}
+.citigems-portal__dl dt {
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--cg-muted);
+	margin: 0 0 0.15rem;
+}
+.citigems-portal__dl dd {
+	margin: 0;
+	font-weight: 600;
+}
+.citigems-portal__chips {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.45rem;
+}
+.citigems-portal__chips li {
+	background: var(--cg-red-soft);
+	color: var(--cg-ink);
+	font-size: 0.85rem;
+	font-weight: 600;
+	padding: 0.35rem 0.7rem;
+	border-radius: 999px;
+}
+.citigems-portal__slot {
+	display: grid;
+	grid-template-columns: minmax(110px, 150px) 1fr;
+	gap: 0.5rem 1rem;
+	padding: 0.7rem 0;
+	border-top: 1px solid rgba(26, 26, 26, 0.08);
+}
+.citigems-portal__slot:first-child {
+	border-top: 0;
+	padding-top: 0;
+}
+.citigems-portal__slot-when,
+.citigems-portal__slot-what {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+}
+.citigems-portal__slot-when span,
+.citigems-portal__slot-what span {
+	font-size: 0.85rem;
+	color: var(--cg-muted);
+}
+.citigems-portal__stats {
+	display: flex;
+	gap: 1.5rem;
+	margin: 0.5rem 0 1rem;
+}
+.citigems-portal__stat-n {
+	display: block;
+	font-family: var(--cg-display);
+	font-weight: 800;
+	font-size: 1.75rem;
+	color: #1b7a3d;
+	line-height: 1;
+}
+.citigems-portal__stat-n.is-abs {
+	color: var(--cg-red);
+}
+.citigems-portal__stat-l {
+	font-size: 0.85rem;
+	color: var(--cg-muted);
+	font-weight: 600;
+}
+.citigems-portal__subh {
+	margin: 0.5rem 0 0.4rem;
+	font-size: 0.95rem;
+	font-weight: 700;
+}
+.citigems-portal__abs-list {
+	margin: 0;
+	padding-left: 1.1rem;
+	color: var(--cg-muted);
+}
+.citigems-portal__plan {
+	padding: 0.75rem 0;
+	border-top: 1px solid rgba(26, 26, 26, 0.08);
+}
+.citigems-portal__plan:first-child {
+	border-top: 0;
+	padding-top: 0;
+}
+.citigems-portal__plan-list {
+	list-style: none;
+	margin: 0.45rem 0;
+	padding: 0;
+}
+.citigems-portal__plan-list li {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.25rem 0;
+	font-size: 0.92rem;
+}
+.citigems-portal__plan-total {
+	margin: 0.25rem 0 0;
+	font-weight: 800;
+	text-align: right;
+}
+.citigems-portal__badge {
+	display: inline-block;
+	margin-left: 0.35rem;
+	padding: 0.1rem 0.45rem;
+	border-radius: 999px;
+	font-size: 0.7rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	vertical-align: middle;
+}
+.citigems-portal__badge.is-paid {
+	background: #e6f6ec;
+	color: #1b7a3d;
+}
+.citigems-portal__badge.is-due {
+	background: var(--cg-red-soft);
+	color: var(--cg-red);
+}
+@media (max-width: 560px) {
+	.citigems-portal__slot {
+		grid-template-columns: 1fr;
+	}
+	/* Login bar: denser chrome (matches edu-spa hide-name) */
+	.citigems-login-bar {
+		gap: 0.45rem;
+		padding: 0.45rem 0.7rem;
+		padding-top: max(0.45rem, env(safe-area-inset-top, 0px));
+		padding-left: max(0.7rem, env(safe-area-inset-left, 0px));
+		padding-right: max(0.7rem, env(safe-area-inset-right, 0px));
+	}
+	.citigems-login-bar__name {
+		display: none;
+	}
+	.citigems-login-bar__plate {
+		padding: 0.2rem 0.35rem;
+		border-radius: 8px;
+	}
+	.citigems-login-bar__plate img {
+		height: 32px;
+	}
+	.citigems-login-bar__langs {
+		gap: 0.1rem;
+		font-size: 0.8rem;
+	}
+	.citigems-login-bar__accueil {
+		margin-left: 0.35rem;
+		font-size: 0.85rem;
+	}
+	.citigems-portal-bar__logout {
+		margin-left: 0.35rem;
+	}
+	body:has(.citigems-login-bar) .page-card,
+	body:has(.citigems-login-bar) .login-content.page-card,
+	.for-login .page-card {
+		margin-top: 0.75rem;
+	}
+}
+
+/* ── Education SPA (/edu-portal) — public-site parity ───────────── */
+body.citigems-edu-spa {
+	margin: 0;
+	min-height: 100vh;
+	font-family: var(--cg-font);
+	color: var(--cg-ink);
+	background:
+		radial-gradient(ellipse 80% 50% at 50% -10%, rgba(237, 28, 36, 0.14), transparent 55%),
+		radial-gradient(ellipse 60% 40% at 100% 100%, rgba(252, 218, 30, 0.16), transparent 50%),
+		var(--cg-bg);
+}
+body.citigems-edu-spa .citigems-portal-bar {
+	position: sticky;
+	top: 0;
+	z-index: 60;
+}
+/* Portal hamburger (shown ≤1023px — covers phone landscape) */
+.citigems-portal-bar__menu {
+	display: none;
+	appearance: none;
+	background: transparent;
+	border: 0;
+	color: #fff;
+	cursor: pointer;
+	padding: 0.35rem;
+	margin-right: 0.15rem;
+	min-width: 44px;
+	min-height: 44px;
+	align-items: center;
+	justify-content: center;
+	border-radius: 8px;
+	flex-shrink: 0;
+}
+.citigems-portal-bar__menu:hover,
+.citigems-portal-bar__menu:focus-visible {
+	background: rgba(255, 255, 255, 0.12);
+	outline: none;
+}
+.citigems-portal-bar__menu svg {
+	display: block;
+	width: 22px;
+	height: 22px;
+}
+.citigems-portal-nav-backdrop {
+	display: none;
+	position: fixed;
+	inset: 0;
+	z-index: 55;
+	background: rgba(26, 26, 26, 0.55);
+	border: 0;
+	padding: 0;
+	cursor: pointer;
+}
+
+/* Drawer chrome (logo + close) — mobile offcanvas parity; hidden on desktop */
+.citigems-portal-drawer__top {
+	display: none;
+}
+body.citigems-edu-spa #app {
+	font-family: var(--cg-font) !important;
+	color: var(--cg-ink);
+	/* room for sticky brand bar */
+	min-height: calc(100vh - 64px);
+}
+body.citigems-edu-spa #app h1,
+body.citigems-edu-spa #app h2,
+body.citigems-edu-spa #app h3,
+body.citigems-edu-spa #app .font-semibold.text-lg,
+body.citigems-edu-spa #app .text-2xl {
+	font-family: var(--cg-display) !important;
+}
+/* Full-height SPA shell under brand bar */
+body.citigems-edu-spa #app > div > .flex.h-screen {
+	height: calc(100vh - 64px) !important;
+	max-height: calc(100vh - 64px);
+}
+/* Sidebar */
+body.citigems-edu-spa #app .border-r.bg-gray-50 {
+	border-right-color: rgba(237, 28, 36, 0.12) !important;
+	background:
+		linear-gradient(180deg, rgba(237, 28, 36, 0.07), transparent 160px),
+		#fff !important;
+	box-shadow: 4px 0 24px rgba(237, 28, 36, 0.04);
+}
+body.citigems-edu-spa #app .border-r.bg-gray-50 a,
+body.citigems-edu-spa #app .border-r.bg-gray-50 button {
+	font-family: var(--cg-font);
+	font-weight: 600;
+}
+/* Active / current nav — SPA uses button.bg-white.shadow-sm (not router-link) */
+body.citigems-edu-spa #app .border-r.bg-gray-50 button.flex.h-7.bg-white.shadow-sm,
+body.citigems-edu-spa #app .border-r a.router-link-active,
+body.citigems-edu-spa #app .border-r a[aria-current="page"],
+body.citigems-edu-spa #app .border-r .router-link-exact-active {
+	color: var(--cg-red) !important;
+	background: var(--cg-red-soft) !important;
+	box-shadow: inset 3px 0 0 var(--cg-gold) !important;
+	border-radius: 10px !important;
+}
+body.citigems-edu-spa #app .border-r.bg-gray-50 button.flex.h-7.bg-white.shadow-sm .text-gray-700,
+body.citigems-edu-spa #app .border-r.bg-gray-50 button.flex.h-7.bg-white.shadow-sm svg {
+	color: var(--cg-red) !important;
+}
+body.citigems-edu-spa #app .border-r a:hover,
+body.citigems-edu-spa #app .border-r.bg-gray-50 button.flex.h-7:hover {
+	color: var(--cg-red) !important;
+}
+/* Main header strip */
+body.citigems-edu-spa #app header.border-b {
+	border-bottom-color: rgba(237, 28, 36, 0.1) !important;
+	background: rgba(255, 255, 255, 0.85);
+	backdrop-filter: blur(6px);
+}
+/* Primary buttons → Citigems red pills (#app + dialogs outside #app) */
+body.citigems-edu-spa #app button.bg-gray-900,
+body.citigems-edu-spa #app .bg-gray-900,
+body.citigems-edu-spa #app button[class*="bg-gray-900"],
+body.citigems-edu-spa #headlessui-portal-root button.bg-gray-900,
+body.citigems-edu-spa #headlessui-portal-root button[class*="bg-gray-900"] {
+	background-color: var(--cg-red) !important;
+	border-color: var(--cg-red) !important;
+	color: #fff !important;
+	border-radius: 999px !important;
+	box-shadow: 0 6px 16px rgba(237, 28, 36, 0.28);
+	font-weight: 700 !important;
+	font-family: var(--cg-font) !important;
+}
+body.citigems-edu-spa #app button.bg-gray-900:hover,
+body.citigems-edu-spa #app .bg-gray-900:hover,
+body.citigems-edu-spa #headlessui-portal-root button.bg-gray-900:hover,
+body.citigems-edu-spa #headlessui-portal-root button[class*="bg-gray-900"]:hover {
+	background-color: #d41820 !important;
+}
+/* Fees CTAs: stock Button is bg-gray-100 + hover:bg-gray-900 — force solid pills.
+   Pay Now = brand red; Download Invoice (Paid) = success green. */
+body.citigems-edu-spa #app button[class*="hover:bg-gray-900"] {
+	background-color: var(--cg-red) !important;
+	color: #fff !important;
+	border-radius: 999px !important;
+	box-shadow: 0 6px 16px rgba(237, 28, 36, 0.22);
+	font-weight: 700 !important;
+	min-height: 40px;
+	padding-left: 0.9rem !important;
+	padding-right: 0.9rem !important;
+}
+body.citigems-edu-spa #app button[class*="hover:bg-gray-900"]:hover {
+	background-color: #d41820 !important;
+	color: #fff !important;
+}
+body.citigems-edu-spa #app button.citigems-fee-download[class*="hover:bg-gray-900"],
+body.citigems-edu-spa #app button.citigems-fee-download {
+	background-color: #1b7a3d !important;
+	color: #fff !important;
+	box-shadow: 0 6px 16px rgba(27, 122, 61, 0.28);
+}
+body.citigems-edu-spa #app button.citigems-fee-download:hover,
+body.citigems-edu-spa #app button.citigems-fee-download[class*="hover:bg-gray-900"]:hover {
+	background-color: #166533 !important;
+	color: #fff !important;
+}
+/* Soft secondary — exclude ListView rows + fee CTAs (need solid fill) */
+body.citigems-edu-spa #app button.bg-gray-100:not([class*="all:unset"]):not([class*="hover:bg-gray-900"]),
+body.citigems-edu-spa #app button.bg-gray-50:not([class*="all:unset"]):not([class*="hover:bg-gray-900"]),
+body.citigems-edu-spa #headlessui-portal-root button.bg-gray-100:not([class*="hover:bg-gray-900"]),
+body.citigems-edu-spa #headlessui-portal-root button.bg-gray-50:not([class*="hover:bg-gray-900"]) {
+	background: var(--cg-red-soft) !important;
+	color: var(--cg-red) !important;
+	border-radius: 999px !important;
+	font-weight: 700;
+}
+
+/* Dialogs (Leave / Mobile Money) — portal root is outside #app */
+body.citigems-edu-spa #headlessui-portal-root [id^="headlessui-dialog-panel"] {
+	width: min(100%, 28rem) !important;
+	max-width: calc(100vw - 1.25rem) !important;
+	border-radius: 16px !important;
+	overflow: hidden;
+	box-shadow: 0 18px 48px rgba(26, 26, 26, 0.22) !important;
+	font-family: var(--cg-font);
+	text-align: left !important;
+}
+body.citigems-edu-spa #headlessui-portal-root .bg-white.px-4.pb-6.pt-5,
+body.citigems-edu-spa #headlessui-portal-root .px-4.pb-7.pt-4 {
+	padding: 1.2rem 1.15rem !important;
+	text-align: left !important;
+}
+body.citigems-edu-spa #headlessui-portal-root .text-2xl.font-semibold {
+	font-family: var(--cg-display) !important;
+	font-size: 1.28rem !important;
+	line-height: 1.3 !important;
+	color: var(--cg-ink) !important;
+}
+body.citigems-edu-spa #headlessui-portal-root .mb-6.flex.items-center.justify-between {
+	margin-bottom: 1rem !important;
+	align-items: flex-start !important;
+	gap: 0.75rem;
+}
+/* Dialog close (X) — small red square, top-right */
+body.citigems-edu-spa #headlessui-portal-root .mb-6.flex.items-center.justify-between > button.h-7.w-7 {
+	width: 36px !important;
+	min-width: 36px !important;
+	max-width: 36px !important;
+	height: 36px !important;
+	min-height: 36px !important;
+	padding: 0 !important;
+	flex-shrink: 0;
+	margin-left: auto;
+	border-radius: 8px !important;
+	background: var(--cg-red) !important;
+	color: #fff !important;
+	box-shadow: none !important;
+}
+body.citigems-edu-spa #headlessui-portal-root .mb-6.flex.items-center.justify-between > button.h-7.w-7:hover,
+body.citigems-edu-spa #headlessui-portal-root .mb-6.flex.items-center.justify-between > button.h-7.w-7:focus-visible {
+	background: #c9161d !important;
+	outline: none;
+}
+body.citigems-edu-spa #headlessui-portal-root .mb-6.flex.items-center.justify-between > button.h-7.w-7 svg,
+body.citigems-edu-spa #headlessui-portal-root .mb-6.flex.items-center.justify-between > button.h-7.w-7 svg path {
+	fill: #fff !important;
+}
+body.citigems-edu-spa #headlessui-portal-root label,
+body.citigems-edu-spa #headlessui-portal-root .mb-1.text-sm,
+body.citigems-edu-spa #headlessui-portal-root .mb-2.text-sm {
+	display: block;
+	text-align: left !important;
+	font-weight: 600;
+	color: var(--cg-muted, #5c5c5c);
+}
+body.citigems-edu-spa #headlessui-portal-root input,
+body.citigems-edu-spa #headlessui-portal-root select,
+body.citigems-edu-spa #headlessui-portal-root textarea {
+	font-size: 16px !important;
+	min-height: 44px;
+	border-radius: 10px !important;
+	width: 100%;
+	box-sizing: border-box;
+}
+body.citigems-edu-spa #headlessui-portal-root input:focus,
+body.citigems-edu-spa #headlessui-portal-root select:focus,
+body.citigems-edu-spa #headlessui-portal-root textarea:focus {
+	border-color: var(--cg-red) !important;
+	box-shadow: 0 0 0 3px rgba(237, 28, 36, 0.18) !important;
+	outline: none;
+}
+body.citigems-edu-spa #headlessui-portal-root .flex.flex-row-reverse.gap-2 {
+	flex-direction: column-reverse !important;
+	gap: 0.65rem !important;
+	align-items: stretch !important;
+}
+body.citigems-edu-spa #headlessui-portal-root .flex.flex-row-reverse.gap-2 > button,
+body.citigems-edu-spa #headlessui-portal-root button.w-48,
+body.citigems-edu-spa #headlessui-portal-root button.h-7:not(.w-7) {
+	width: 100% !important;
+	min-height: 44px !important;
+	height: auto !important;
+	padding: 0.7rem 1rem !important;
+	font-size: 1rem !important;
+}
+
+/* Notes / Fees / Leaves — keep table layout; scroll horizontally on narrow screens */
+body.citigems-edu-spa #app .h-\[250px\] {
+	height: auto !important;
+	min-height: 0 !important;
+	max-height: none !important;
+	overflow: visible !important;
+}
+body.citigems-edu-spa #app .px-5.py-4 {
+	padding: 0.85rem 0.9rem !important;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	overscroll-behavior-x: contain;
+}
+/* SPA ListView: real horizontal scroller is the direct parent of w-max */
+body.citigems-edu-spa #app .relative.flex.w-full.flex-1.flex-col.overflow-x-auto {
+	min-width: 0;
+	max-width: 100%;
+	overflow-x: auto !important;
+	-webkit-overflow-scrolling: touch;
+	overscroll-behavior-x: contain;
+}
+body.citigems-edu-spa #app .flex.w-max.min-w-full.flex-col {
+	width: max-content !important;
+	min-width: 100% !important;
+	max-width: none !important;
+}
+body.citigems-edu-spa #app .px-5.py-4 .grid.items-center {
+	box-sizing: border-box;
+	column-gap: 0.75rem;
+	min-width: 44rem; /* readable columns instead of crushed ellipsis */
+}
+body.citigems-edu-spa #app .px-5.py-4 .grid.items-center.space-x-4 > * {
+	margin-left: 0 !important;
+	min-width: 6.5rem;
+	overflow: visible;
+	white-space: nowrap;
+}
+body.citigems-edu-spa #app .px-5.py-4 .mb-2.grid.items-center {
+	background: var(--cg-red-soft) !important;
+	color: var(--cg-ink);
+	font-weight: 700;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+body.citigems-edu-spa #app .px-5.py-4 .grid.items-center.rounded.px-2 {
+	background: #fff;
+	border: 1px solid rgba(237, 28, 36, 0.1);
+	border-radius: 10px;
+	margin-bottom: 0.35rem;
+}
+@media (max-width: 1023px) {
+	body.citigems-edu-spa #app .px-5.py-4 {
+		padding: 0.65rem 0.55rem !important;
+		overflow-x: auto !important;
+		-webkit-overflow-scrolling: touch;
+	}
+	body.citigems-edu-spa #app .px-5.py-4 .grid.items-center {
+		min-width: 52rem;
+	}
+	body.citigems-edu-spa #app .px-5.py-4 .grid.items-center.space-x-4 > * {
+		min-width: 7rem;
+	}
+	body.citigems-edu-spa #app .px-5.py-4 .grid.items-center.rounded.px-2 button {
+		min-height: 36px !important;
+		border-radius: 999px !important;
+		white-space: nowrap;
+	}
+}
+/* Cards / list panels */
+body.citigems-edu-spa #app .rounded-lg.border,
+body.citigems-edu-spa #app .rounded-md.border,
+body.citigems-edu-spa #app .border.bg-white {
+	border-radius: var(--cg-radius) !important;
+	border-color: rgba(26, 26, 26, 0.06) !important;
+	box-shadow: var(--cg-shadow);
+}
+/* Focus rings */
+body.citigems-edu-spa #app input:focus,
+body.citigems-edu-spa #app select:focus,
+body.citigems-edu-spa #app textarea:focus {
+	border-color: var(--cg-red) !important;
+	box-shadow: 0 0 0 3px rgba(237, 28, 36, 0.18) !important;
+	outline: none;
+}
+@media (max-width: 640px) {
+	body.citigems-edu-spa .citigems-login-bar__name {
+		display: none;
+	}
+}
+
+/* Edu-portal mobile shell: overlay drawer + full-width main
+   Visual parity with public-site .offcanvas__info (white / red / gold).
+   1023px covers phone landscape (e.g. 844×390) without desktop sidebar. */
+@media (max-width: 1023px) {
+	/* Keep page from sideways-scrolling (tables/calendar scroll inside) */
+	body.citigems-edu-spa,
+	body.citigems-edu-spa #app {
+		overflow-x: hidden;
+		max-width: 100vw;
+	}
+	body.citigems-edu-spa .citigems-portal-bar {
+		gap: 0.45rem;
+		padding-left: max(0.55rem, env(safe-area-inset-left, 0px));
+		padding-right: max(0.55rem, env(safe-area-inset-right, 0px));
+	}
+	body.citigems-edu-spa .citigems-portal-bar__menu {
+		display: inline-flex;
+	}
+	/* Accueil lives on logo + drawer — free bar space */
+	body.citigems-edu-spa .citigems-login-bar__accueil,
+	body.citigems-edu-spa .citigems-login-bar__name {
+		display: none;
+	}
+	body.citigems-edu-spa .citigems-portal-bar__logout {
+		margin-left: 0.35rem;
+	}
+	body.citigems-edu-spa.citigems-portal-nav-open .citigems-portal-nav-backdrop {
+		display: block;
+	}
+	/* Natural scroll under sticky bar */
+	body.citigems-edu-spa #app > div > .flex.h-screen {
+		height: auto !important;
+		max-height: none !important;
+		min-height: calc(100dvh - 56px);
+		position: relative;
+		overflow-x: hidden;
+		width: 100%;
+		max-width: 100%;
+	}
+	/* Sidebar → off-canvas drawer (public offcanvas palette) */
+	body.citigems-edu-spa #app .border-r.bg-gray-50 {
+		position: fixed !important;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		z-index: 70;
+		display: flex !important;
+		flex-direction: column;
+		width: min(22rem, 86vw) !important;
+		max-width: 86vw;
+		padding: 1.25rem 1.25rem env(safe-area-inset-bottom, 1.25rem) !important;
+		padding-top: max(1.25rem, env(safe-area-inset-top, 0px)) !important;
+		transform: translateX(-105%);
+		transition: transform 0.28s ease;
+		background: #fff !important;
+		border-right: 3px solid var(--cg-red) !important;
+		box-shadow: 8px 0 28px rgba(237, 28, 36, 0.12);
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	body.citigems-edu-spa.citigems-portal-nav-open #app .border-r.bg-gray-50 {
+		transform: translateX(0);
+	}
+
+	.citigems-portal-drawer__top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		margin-bottom: 1rem;
+		padding-bottom: 0.85rem;
+		border-bottom: 1px solid rgba(237, 28, 36, 0.12);
+	}
+	.citigems-portal-drawer__logo {
+		display: block;
+		max-width: 110px;
+		line-height: 0;
+	}
+	.citigems-portal-drawer__logo img {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+	.citigems-portal-drawer__close {
+		appearance: none;
+		width: 40px;
+		height: 40px;
+		border: 0;
+		border-radius: 4px;
+		background: var(--cg-red);
+		color: #fff;
+		cursor: pointer;
+		display: grid;
+		place-items: center;
+		flex-shrink: 0;
+		transition: background-color 0.2s ease;
+	}
+	.citigems-portal-drawer__close:hover,
+	.citigems-portal-drawer__close:focus-visible {
+		background: #c9161d;
+		outline: none;
+	}
+	.citigems-portal-drawer__close svg {
+		width: 16px;
+		height: 16px;
+		display: block;
+	}
+
+	/* Account card — non-interactive identity (no UserDropdown) */
+	body.citigems-edu-spa #app .border-r.bg-gray-50 button.flex.h-12 {
+		pointer-events: none !important;
+		width: 100% !important;
+		max-width: 100% !important;
+		box-sizing: border-box;
+		margin: 0 0 0.85rem !important;
+		padding: 0.65rem 0.75rem !important;
+		border: 1px solid rgba(237, 28, 36, 0.12) !important;
+		border-radius: 12px !important;
+		background: var(--cg-red-soft) !important;
+		box-shadow: none !important;
+		color: var(--cg-ink) !important;
+		cursor: default !important;
+	}
+	body.citigems-edu-spa #app .border-r.bg-gray-50 button.flex.h-12 .h-4.w-4.text-gray-600 {
+		display: none !important;
+	}
+
+	/* Nav items — SPA SidebarLink is button.flex.h-7 */
+	body.citigems-edu-spa #app .border-r.bg-gray-50 a,
+	body.citigems-edu-spa #app .border-r.bg-gray-50 button.flex.h-7 {
+		color: var(--cg-ink) !important;
+		font-weight: 600 !important;
+		border-radius: 10px !important;
+		border-bottom: none !important;
+		min-height: 40px !important;
+		height: auto !important;
+		padding: 0.55rem 0.7rem !important;
+		margin: 0.2rem 0 !important;
+		background: transparent !important;
+		box-shadow: none !important;
+		width: calc(100% - 0.5rem) !important;
+	}
+	body.citigems-edu-spa #app .border-r.bg-gray-50 a:hover,
+	body.citigems-edu-spa #app .border-r.bg-gray-50 button.flex.h-7:hover {
+		color: var(--cg-red) !important;
+		background: rgba(237, 28, 36, 0.05) !important;
+	}
+	body.citigems-edu-spa #app .border-r.bg-gray-50 button.flex.h-7.bg-white.shadow-sm,
+	body.citigems-edu-spa #app .border-r a.router-link-active,
+	body.citigems-edu-spa #app .border-r a[aria-current="page"],
+	body.citigems-edu-spa #app .border-r .router-link-exact-active {
+		color: var(--cg-red) !important;
+		background: var(--cg-red-soft) !important;
+		box-shadow: inset 3px 0 0 var(--cg-gold) !important;
+		border-radius: 10px !important;
+		font-weight: 700 !important;
+	}
+	body.citigems-edu-spa #app .border-r.bg-gray-50 button.flex.h-7.bg-white.shadow-sm .text-gray-700,
+	body.citigems-edu-spa #app .border-r.bg-gray-50 button.flex.h-7.bg-white.shadow-sm svg {
+		color: var(--cg-red) !important;
+	}
+
+	/* Hide desktop collapse control in the drawer */
+	body.citigems-edu-spa #app .border-r.bg-gray-50 > .flex.h-full > .m-2,
+	body.citigems-edu-spa #app .border-r.bg-gray-50 button.m-2 {
+		display: none !important;
+	}
+
+	/* Drawer logout footer */
+	.citigems-portal-drawer__logout {
+		appearance: none;
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		width: 100%;
+		margin-top: auto;
+		padding: 0.85rem 0.35rem 0.15rem;
+		border: 0;
+		border-top: 1px solid rgba(237, 28, 36, 0.14);
+		background: transparent;
+		color: var(--cg-red);
+		font-family: var(--cg-font);
+		font-weight: 700;
+		font-size: 0.95rem;
+		cursor: pointer;
+		text-align: left;
+	}
+	.citigems-portal-drawer__logout:hover,
+	.citigems-portal-drawer__logout:focus-visible {
+		color: #c9161d;
+		outline: none;
+	}
+	.citigems-portal-drawer__logout svg {
+		width: 20px;
+		height: 20px;
+		flex-shrink: 0;
+	}
+
+	/* Force expanded nav labels inside drawer */
+	body.citigems-edu-spa #app .border-r.bg-gray-50 > .flex.h-full {
+		width: 100% !important;
+		min-height: calc(100% - 4.5rem);
+	}
+	body.citigems-edu-spa #app .border-r.bg-gray-50 .ml-0.w-0.overflow-hidden.opacity-0,
+	body.citigems-edu-spa #app .border-r.bg-gray-50 [class*="opacity-0"][class*="w-0"] {
+		margin-left: 0.5rem !important;
+		width: auto !important;
+		overflow: visible !important;
+		opacity: 1 !important;
+	}
+	/* Full-width main — min-width:0 so nested .px-5.py-4 can scroll-x */
+	body.citigems-edu-spa #app .flex-1.flex.flex-col.h-full.overflow-auto {
+		width: 100% !important;
+		max-width: 100% !important;
+		min-width: 0 !important;
+		flex: 1 1 100% !important;
+		overflow-x: auto !important;
+		-webkit-overflow-scrolling: touch;
+	}
+	/* Slim Education header strip */
+	body.citigems-edu-spa #app header.border-b {
+		padding-left: 0.75rem !important;
+		padding-right: 0.75rem !important;
+	}
+	body.citigems-edu-spa #app header.border-b .text-2xl,
+	body.citigems-edu-spa #app header.border-b h1 {
+		font-size: 1.15rem !important;
+		line-height: 1.25 !important;
+	}
+	/* Schedule: scroll inside the panel; wider days so titles stay readable */
+	body.citigems-edu-spa #app .p-5.h-full {
+		overflow-x: auto !important;
+		overflow-y: auto !important;
+		-webkit-overflow-scrolling: touch;
+		padding: 0.75rem !important;
+		max-width: 100%;
+		overscroll-behavior-x: contain;
+	}
+	body.citigems-edu-spa #app .min-w-\[600px\] {
+		min-width: 980px !important; /* ~140px / day */
+		width: max-content;
+		max-width: none;
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7 .p-2.rounded-lg,
+	body.citigems-edu-spa #app .grid.grid-cols-7 .p-2.rounded-md {
+		padding: 0.4rem 0.45rem !important;
+		overflow: hidden;
+		min-width: 0;
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7 .flex.flex-col.whitespace-nowrap {
+		max-width: 100% !important;
+		width: 100% !important;
+		min-width: 0 !important;
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7 .text-sm {
+		font-size: 0.75rem !important;
+		line-height: 1.25 !important;
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7 .text-xs {
+		font-size: 0.68rem !important;
+		line-height: 1.2 !important;
+	}
+	/* Keep single-line ellipsis — previous white-space:normal stacked letters */
+	body.citigems-edu-spa #app .grid.grid-cols-7 .text-ellipsis {
+		display: block !important;
+		white-space: nowrap !important;
+		overflow: hidden !important;
+		text-overflow: ellipsis !important;
+		max-width: 100%;
+	}
+
+	/*
+	 * Schedule event details = Tippy/Popover with placement:"right".
+	 * On narrow screens that opens off-canvas — force a centered sheet.
+	 * Scope to schedule sheets only (:has title / detail body) so UserDropdown
+	 * and other Dropdown menus keep normal anchoring.
+	 */
+	#frappeui-popper-root .popover-container:has(.font-semibold.text-xl),
+	#frappeui-popper-root .popover-container:has(.flex.flex-col.gap-5.pt-5) {
+		position: fixed !important;
+		top: 50% !important;
+		left: 50% !important;
+		right: auto !important;
+		bottom: auto !important;
+		transform: translate(-50%, -50%) !important;
+		width: min(22rem, calc(100vw - 1.5rem)) !important;
+		max-width: calc(100vw - 1.5rem) !important;
+		min-width: 0 !important;
+		max-height: min(80vh, 560px) !important;
+		z-index: 200 !important;
+		margin: 0 !important;
+	}
+	#frappeui-popper-root .popover-container:has(.font-semibold.text-xl) > div,
+	#frappeui-popper-root .popover-container:has(.flex.flex-col.gap-5.pt-5) > div {
+		max-height: min(80vh, 560px);
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	#frappeui-popper-root .popover-container:has(.font-semibold.text-xl) .rounded-lg.border.bg-white.shadow-xl,
+	#frappeui-popper-root .popover-container:has(.flex.flex-col.gap-5.pt-5) .rounded-lg.border.bg-white.shadow-xl {
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+	#frappeui-popper-root .flex.flex-col.gap-5.pt-5.px-6.pb-6 {
+		padding: 1rem 1.1rem 1.15rem !important;
+		gap: 0.85rem !important;
+	}
+	#frappeui-popper-root .font-semibold.text-xl {
+		font-size: 1.05rem !important;
+		line-height: 1.35 !important;
+		white-space: normal !important;
+		word-break: break-word;
+	}
+	#frappeui-popper-root .popover-container:has(.font-semibold.text-xl) .flex.gap-2.items-center,
+	#frappeui-popper-root .popover-container:has(.flex.flex-col.gap-5.pt-5) .flex.gap-2.items-center {
+		align-items: flex-start !important;
+	}
+	#frappeui-popper-root .popover-container:has(.font-semibold.text-xl) .flex.gap-2.items-center .text-sm,
+	#frappeui-popper-root .popover-container:has(.flex.flex-col.gap-5.pt-5) .flex.gap-2.items-center .text-sm {
+		white-space: normal !important;
+		word-break: break-word;
+		min-width: 0;
+	}
+}
+
+/* Short phone landscape — reclaim vertical space; keep tables/calendar scrollable */
+@media (orientation: landscape) and (max-height: 500px) {
+	body.citigems-edu-spa .citigems-portal-bar.citigems-login-bar {
+		gap: 0.35rem;
+		padding: 0.25rem 0.55rem;
+		padding-top: max(0.25rem, env(safe-area-inset-top, 0px));
+		padding-left: max(0.55rem, env(safe-area-inset-left, 0px));
+		padding-right: max(0.55rem, env(safe-area-inset-right, 0px));
+	}
+	body.citigems-edu-spa .citigems-login-bar__plate {
+		padding: 0.15rem 0.3rem;
+		border-radius: 6px;
+	}
+	body.citigems-edu-spa .citigems-login-bar__plate img {
+		height: 28px;
+	}
+	body.citigems-edu-spa .citigems-portal-bar__menu,
+	body.citigems-edu-spa .citigems-portal-bar__logout,
+	body.citigems-edu-spa .citigems-login-bar__lang {
+		min-width: 40px;
+		min-height: 40px;
+	}
+	body.citigems-edu-spa .citigems-portal-bar__menu svg,
+	body.citigems-edu-spa .citigems-portal-bar__logout svg {
+		width: 20px;
+		height: 20px;
+	}
+	body.citigems-edu-spa #app {
+		min-height: calc(100vh - 48px);
+	}
+	body.citigems-edu-spa #app > div > .flex.h-screen {
+		min-height: calc(100dvh - 48px);
+	}
+	body.citigems-edu-spa #app header.border-b {
+		min-height: 0 !important;
+		padding-top: 0.35rem !important;
+		padding-bottom: 0.35rem !important;
+	}
+	body.citigems-edu-spa #app header.border-b .text-2xl,
+	body.citigems-edu-spa #app header.border-b h1 {
+		font-size: 1rem !important;
+	}
+	/* Calendar: slightly tighter day columns so more days fit before scroll */
+	body.citigems-edu-spa #app .min-w-\[600px\] {
+		min-width: 840px !important;
+	}
+	body.citigems-edu-spa #app .p-5.h-full {
+		padding: 0.5rem !important;
+	}
+}
+
+/* Desktop schedule calendar — readable titles, no per-day scrollbars */
+@media (min-width: 1024px) {
+	body.citigems-edu-spa #app .p-5.h-full {
+		padding: 1rem 1.25rem 1.25rem !important;
+	}
+	body.citigems-edu-spa #app header.border-b {
+		padding-top: 0.65rem !important;
+		padding-bottom: 0.65rem !important;
+	}
+	/* Let the month grid grow with content instead of clipping each day */
+	body.citigems-edu-spa #app .h-\[92\%\].min-h-\[600px\],
+	body.citigems-edu-spa #app .min-h-\[600px\].min-w-\[600px\] {
+		height: auto !important;
+		min-height: min(78vh, 820px) !important;
+		min-width: 0 !important;
+		width: 100% !important;
+		max-width: 100%;
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7.border-t-\[1px\].h-full {
+		height: auto !important;
+		min-height: 640px;
+		grid-template-rows: repeat(6, minmax(9.5rem, auto)) !important;
+	}
+	body.citigems-edu-spa #app .relative.flex.flex-col.items-center.w-full.overflow-y-auto {
+		overflow: visible !important;
+		align-items: stretch !important;
+		padding: 0.35rem 0.4rem 0.5rem !important;
+		gap: 0.3rem;
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7 .mb-2.cursor-pointer.w-full {
+		margin-bottom: 0.3rem !important;
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7 .p-2.rounded-md,
+	body.citigems-edu-spa #app .grid.grid-cols-7 .p-2.rounded-lg {
+		padding: 0.4rem 0.5rem !important;
+		border-radius: 8px !important;
+		/* keep ERPNext class_schedule_color (bg-*/border-* from CalendarEvent) */
+		box-shadow: 0 1px 2px rgba(26, 26, 26, 0.06);
+		min-width: 0;
+		width: 100%;
+		box-sizing: border-box;
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7 .border-l-2 {
+		border-left-width: 3px !important;
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7 .flex.gap-3.relative.px-2.items-start {
+		padding-left: 0.15rem !important;
+		padding-right: 0.15rem !important;
+		gap: 0.4rem !important;
+		width: 100%;
+		min-width: 0;
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7 .flex.flex-col.whitespace-nowrap {
+		white-space: normal !important;
+		width: 100% !important;
+		max-width: 100% !important;
+		min-width: 0 !important;
+		overflow: visible !important;
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7 .text-ellipsis {
+		display: -webkit-box !important;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		white-space: normal !important;
+		overflow: hidden !important;
+		text-overflow: ellipsis !important;
+		word-break: break-word;
+		max-width: 100%;
+		line-height: 1.25 !important;
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7 .font-medium.text-sm {
+		font-size: 0.8125rem !important;
+		font-weight: 600 !important;
+		color: var(--cg-ink);
+	}
+	body.citigems-edu-spa #app .grid.grid-cols-7 .font-normal.text-xs {
+		font-size: 0.7rem !important;
+		color: var(--cg-muted);
+		-webkit-line-clamp: 1;
+	}
 }

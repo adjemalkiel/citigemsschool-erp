@@ -30,6 +30,16 @@ bench --site citigems.localhost execute citigems_custom.scripts.seed_citigems.se
 
 Then configure **MeCef Settings** and **FedaPay Settings** in Desk (tokens never in git).
 
+Marketing site origin (login « Accueil » + edu-portal header) — set in `site_config.json`:
+
+```json
+{
+  "citigems_marketing_url": "https://www.citigemsschool.com"
+}
+```
+
+Default if unset: `https://www.citigemsschool.com`. ERP login for parents: `{ERP}/login?redirect-to=/edu-portal`.
+
 Docs (repo root): `docs/branding-sync.md`, `docs/company-setup.md`, `docs/proposal-backlog.md`.
 
 ## Runtime deps

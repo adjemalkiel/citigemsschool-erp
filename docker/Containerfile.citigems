@@ -1,4 +1,4 @@
-# Citigems ERPNext v15 image — extend stock erpnext and bake apps from apps.json.
+# Citigems ERPNext v16 image — extend stock erpnext and bake apps from apps.json.
 # Prefer this on ~8GB hosts (avoids full bench init OOM).
 #
 # Build (from repo root):
@@ -6,14 +6,19 @@
 #
 # Full layered rebuild (more RAM): ./scripts/build.sh --layered
 
-ARG BASE_IMAGE=frappe/erpnext:v15
+ARG BASE_IMAGE=frappe/erpnext:v16
 FROM ${BASE_IMAGE}
 
 USER root
+# Headless Chromium shared libs for Sales Invoice Classic PDF (print_format chrome)
 RUN set -eux; \
     apt-get update -qq; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
-      build-essential git pkg-config; \
+      build-essential git pkg-config \
+      libatk-bridge2.0-0 libatk1.0-0 libcups2 libdrm2 libxkbcommon0 \
+      libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 \
+      libasound2 libpango-1.0-0 libcairo2 libnss3 libnspr4 \
+      libx11-xcb1 libxcb-dri3-0 libgtk-3-0 fonts-liberation; \
     rm -rf /var/lib/apt/lists/*
 
 USER frappe

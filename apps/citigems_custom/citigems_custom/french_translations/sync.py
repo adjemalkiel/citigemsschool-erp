@@ -1,5 +1,10 @@
 """Sync French Translations catalog into the Translation DocType."""
 
+from __future__ import annotations
+
+import csv
+from pathlib import Path
+
 import frappe
 
 
@@ -11,22 +16,44 @@ def _import(name, attr, default=None):
 		return default if default is not None else {}
 
 
+def _load_berakha_csv() -> dict[str, str]:
+	"""Full FR dump from Berakha/DevOps ERPNext (POS / URY / Maya already filtered out)."""
+	path = Path(__file__).with_name("berakha_fr.csv")
+	if not path.is_file():
+		return {}
+	out: dict[str, str] = {}
+	with path.open(newline="", encoding="utf-8") as f:
+		for row in csv.DictReader(f):
+			if (row.get("language") or "").strip() != "fr":
+				continue
+			src = (row.get("source_text") or "").strip()
+			tr = (row.get("translated_text") or "").strip()
+			if src and tr:
+				out[src] = tr
+	return out
+
+
 def _upsert_translations(language, catalog):
 	for src, tr in catalog.items():
 		if not src or not tr:
 			continue
-		name = frappe.db.get_value("Translation", {"language": language, "source_text": src})
-		if name:
-			frappe.db.set_value("Translation", name, "translated_text", tr)
-		else:
-			frappe.get_doc(
-				{
-					"doctype": "Translation",
-					"language": language,
-					"source_text": src,
-					"translated_text": tr,
-				}
-			).insert(ignore_permissions=True)
+		# BINARY match — keep both "Forgot password?" and "Forgot Password?" rows
+		# (MariaDB CI would otherwise treat them as one for non-binary lookups).
+		exact = frappe.db.sql(
+			"SELECT name FROM `tabTranslation` WHERE language=%s AND BINARY source_text=%s LIMIT 1",
+			(language, src),
+		)
+		if exact:
+			frappe.db.set_value("Translation", exact[0][0], "translated_text", tr)
+			continue
+		frappe.get_doc(
+			{
+				"doctype": "Translation",
+				"language": language,
+				"source_text": src,
+				"translated_text": tr,
+			}
+		).insert(ignore_permissions=True)
 
 
 def patch_onboarding_titles() -> None:
@@ -52,7 +79,8 @@ def patch_onboarding_titles() -> None:
 
 
 def sync_translations():
-	catalog = {}
+	# Layer: Berakha dump → module catalogs → school overrides (last wins).
+	catalog = _load_berakha_csv()
 	for mod, attr in (
 		("catalog", "FR_DESK_TRANSLATIONS"),
 		("stock", "FR_STOCK_TRANSLATIONS"),
@@ -67,3 +95,4 @@ def sync_translations():
 	patch_onboarding_titles()
 	frappe.db.commit()
 	frappe.clear_cache()
+	return {"count": len(catalog)}

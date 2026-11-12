@@ -19,7 +19,21 @@ doc_events = {
 	},
 }
 
-doctype_js = {"Sales Invoice": "public/js/sales_invoice.js"}
+doctype_js = {
+	"Sales Invoice": "public/js/sales_invoice.js",
+	"Student Report Generation Tool": "public/js/student_report_generation_tool.js",
+}
+
+override_whitelisted_methods = {
+	"education.education.doctype.student_report_generation_tool.student_report_generation_tool.preview_report_card":
+		"citigems_custom.education_report.preview_report_card",
+	"education.education.api.get_student_invoices":
+		"citigems_custom.api.education_portal.get_student_invoices",
+	"education.education.api.get_course_schedule_for_student":
+		"citigems_custom.api.education_portal.get_course_schedule_for_student",
+	"education.education.api.get_student_attendance":
+		"citigems_custom.api.education_portal.get_student_attendance",
+}
 
 jinja = {
 	"methods": [
@@ -55,7 +69,7 @@ fixtures = [
 	},
 	{
 		"dt": "Mode of Payment",
-		"filters": [["name", "=", "Mobile Money"]],
+		"filters": [["name", "in", ["Mobile Money", "Espèces"]]],
 	},
 	{
 		"dt": "Print Format",
@@ -64,18 +78,18 @@ fixtures = [
 ]
 
 app_include_css = [
-	"/assets/citigems_custom/css/citigems_brand.css",
+	"/assets/citigems_custom/css/citigems_brand.css?v=20261111q",
 ]
 app_include_js = [
-	"/assets/citigems_custom/js/citigems_rebrand.js",
+	"/assets/citigems_custom/js/citigems_rebrand.js?v=20261111q",
 	"/assets/citigems_custom/js/desk_theme_loader.js",
 ]
 
 web_include_css = [
-	"/assets/citigems_custom/css/citigems_brand.css",
+	"/assets/citigems_custom/css/citigems_brand.css?v=20261111q",
 ]
 web_include_js = [
-	"/assets/citigems_custom/js/citigems_rebrand.js",
+	"/assets/citigems_custom/js/citigems_rebrand.js?v=20261111q",
 	"/assets/citigems_custom/js/desk_theme_loader.js",
 ]
 
@@ -83,15 +97,19 @@ update_website_context = [
 	"citigems_custom.branding.update_website_context",
 ]
 
+# Website Users with Guardian/Student → /edu-portal; Desk stays stock /app.
+# Stock login honors redirect-to before this hook.
+get_website_user_home_page = "citigems_custom.website_home.get_website_user_home_page"
+
 boot_session = [
 	"citigems_custom.branding.boot_session",
 	"citigems_custom.desk_theme.inject_bootinfo",
 ]
 
-app_logo_url = "/assets/citigems_custom/images/devops-logo.svg"
+app_logo_url = "/assets/citigems_custom/images/citigems-logo.png"
 website_context = {
-	"favicon": "/assets/citigems_custom/images/devops-favicon.svg",
-	"splash_image": "/assets/citigems_custom/images/devops-logo.svg",
+	"favicon": "/assets/citigems_custom/images/citigems-favicon.png",
+	"splash_image": "/assets/citigems_custom/images/citigems-logo.png",
 	"app_name": "Citigems School",
 }
 
@@ -101,12 +119,16 @@ after_migrate = [
 	"citigems_custom.locale.ensure_site_language",
 	"citigems_custom.locale.ensure_xof_fcfa_display",
 	"citigems_custom.desk_theme.ensure_user_field",
+	"citigems_custom.education_workspace.ensure_education_workspace",
+	"citigems_custom.website_home.ensure_portal_roles_no_desk",
 ]
 
 after_install = "citigems_custom.install.after_install"
 
 before_request = [
+	"citigems_custom.website_routes.patch_edu_portal_deep_routes",
 	"citigems_custom.locale.force_site_language_for_guests",
+	"citigems_custom.website_home.redirect_website_users_from_desk",
 ]
 
 try:

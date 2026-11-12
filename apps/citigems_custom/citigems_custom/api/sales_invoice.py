@@ -8,6 +8,7 @@ REQUEST_TIMEOUT = 30
 # Correspondance modes de paiement ERPNext -> e-MECeF (PaymentTypeEnum)
 PAYMENT_MODE_MAP = {
     "Cash": "ESPECES",
+    "Espèces": "ESPECES",
     "Bank Draft": "VIREMENT",
     "Bank": "VIREMENT",
     "Wire Transfer": "VIREMENT",

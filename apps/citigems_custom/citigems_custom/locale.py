@@ -14,10 +14,19 @@ XOF_NUMBER_FORMAT = "#,###"
 
 
 def force_site_language_for_guests():
-	"""Use System Settings language for guests instead of browser Accept-Language."""
+	"""French-first for guests; honor login FR/EN picker (preferred_language cookie)."""
 	if frappe.session.user != "Guest":
 		return
 	if frappe.form_dict.get("_lang"):
+		return
+
+	# Same cookie stock Frappe language picker sets (website.js).
+	cookie = None
+	if getattr(frappe, "request", None) and frappe.request.cookies:
+		cookie = (frappe.request.cookies.get("preferred_language") or "").strip().lower()
+	if cookie in ("fr", "en"):
+		if frappe.local.lang != cookie:
+			frappe.local.lang = cookie
 		return
 
 	site_lang = frappe.get_system_settings("language") or DEFAULT_LANGUAGE

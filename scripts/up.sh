@@ -16,6 +16,19 @@ fi
 echo "Starting compose project '${PROJECT_NAME}' (HTTP :${HTTP_PUBLISH_PORT:-8080}) ..."
 compose up -d
 
+# Frontend image assets/ is not a shared volume — bind-mounted citigems_custom
+# needs a symlink or /assets/citigems_custom/* 404 (login CSS/JS lost).
+if compose ps --status running --services 2>/dev/null | grep -qx frontend; then
+  compose exec -T frontend bash -lc '
+    dest=/home/frappe/frappe-bench/assets/citigems_custom
+    src=/home/frappe/frappe-bench/apps/citigems_custom/citigems_custom/public
+    if [[ -d "$src" && ! -e "$dest" ]]; then
+      ln -s "$src" "$dest"
+      echo "Linked assets/citigems_custom"
+    fi
+  ' || true
+fi
+
 echo "Waiting for create-site to finish ..."
 # create-site is a oneshot; wait until exited
 for i in $(seq 1 180); do

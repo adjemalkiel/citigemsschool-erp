@@ -1,23 +1,21 @@
+"""Boot the Education SPA at /edu-portal (default template + Citigems chrome)."""
+
 import frappe
+
+from citigems_custom.branding import MARKETING_NAME, SCHOOL_LOGO
 
 no_cache = 1
 
 
 def get_context(context):
-	"""Edu portal: fees + statements first (Guardian / Student)."""
-	abbr = None
 	logo = None
 	try:
-		abbr = frappe.db.get_single_value(
-			"Education Settings", "school_college_name_abbreviation"
-		)
 		logo = frappe.db.get_single_value("Education Settings", "school_college_logo")
 	except Exception:
 		pass
 
 	context.no_cache = 1
-	context.abbr = abbr or "Citigems"
-	context.logo = logo or "/assets/citigems_custom/images/devops-logo.svg"
-	context.powered_by = "Powered by DevOps"
-	context.user = frappe.session.user
-	context.is_guest = frappe.session.user == "Guest"
+	context.abbr = MARKETING_NAME
+	context.logo = logo or SCHOOL_LOGO
+	# Stock {{ frappe.session.csrf_token }} can render None for Website Users.
+	context.csrf_token = frappe.sessions.get_csrf_token()

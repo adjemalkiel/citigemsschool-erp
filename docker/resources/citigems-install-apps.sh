@@ -33,7 +33,7 @@ def clone_and_pip(name, url, branch):
 
 for app in apps:
     url = app["url"]
-    branch = app.get("branch", "version-15")
+    branch = app.get("branch", "version-16")
     name = url.rstrip("/").split("/")[-1]
     if name.endswith(".git"):
         name = name[:-4]
@@ -58,6 +58,53 @@ if [ -d sites/assets ]; then
   cp -a sites/assets assets
   rm -rf sites/assets
 fi
+
+# Ensure assets.json maps short bundle names → hashed dist files (bench build may no-op without node).
+python3 <<'PY'
+from pathlib import Path
+import re, json
+assets = Path("/home/frappe/frappe-bench/assets")
+assets.mkdir(parents=True, exist_ok=True)
+ltr, rtl = {}, {}
+for dist in assets.glob("*/dist/**/*"):
+    if not dist.is_file() or dist.suffix == ".map":
+        continue
+    m = re.match(r"^(.+)\.([A-Z0-9]+)\.(css|js)$", dist.name)
+    if not m:
+        continue
+    short = f"{m.group(1)}.{m.group(3)}"
+    url = f"/assets/{dist.relative_to(assets).as_posix()}"
+    if "/css-rtl/" in url or "/js-rtl/" in url:
+        rtl[f"rtl_{short}"] = url
+    else:
+        ltr[short] = url
+out = dict(ltr)
+out.update(rtl)
+path = assets / "assets.json"
+existing = {}
+if path.exists():
+    try:
+        existing = json.loads(path.read_text() or "{}")
+    except Exception:
+        existing = {}
+if len(existing) < 5 and out:
+    path.write_text(json.dumps(out, indent=1, sort_keys=True) + "\n")
+    print(f"wrote assets.json with {len(out)} keys", flush=True)
+else:
+    print(f"assets.json ok ({len(existing)} keys)", flush=True)
+# Link any app public/ dirs missing from assets/
+apps = Path("/home/frappe/frappe-bench/apps")
+for app in apps.iterdir():
+    if not app.is_dir():
+        continue
+    pub = next(app.glob("*/public"), None)
+    if pub is None or not pub.is_dir():
+        continue
+    link = assets / app.name
+    if not link.exists():
+        link.symlink_to(pub)
+        print(f"linked assets/{app.name}", flush=True)
+PY
 
 find apps -mindepth 2 -name .git -type d -prune -exec rm -rf {} + 2>/dev/null || true
 echo "citigems apps install complete"

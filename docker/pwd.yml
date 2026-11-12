@@ -1,4 +1,4 @@
-# Citigems ERPNext v15 — pwd.yml-style compose (development / single-host)
+# Citigems ERPNext v16 — pwd.yml-style compose (development / single-host)
 # Usage: from repo root via scripts/up.sh
 name: citigems
 

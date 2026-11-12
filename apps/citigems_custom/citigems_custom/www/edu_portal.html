@@ -4,238 +4,43 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="{{ logo }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ abbr }} — Portail</title>
-    <link rel="stylesheet" href="/assets/citigems_custom/css/citigems_brand.css" />
-    <style>
-      :root {
-        --cg-ink: #1a2b3c;
-        --cg-muted: #5a6a7a;
-        --cg-accent: #0d6e6e;
-        --cg-bg: linear-gradient(160deg, #e8f0f4 0%, #f7fafc 45%, #eef6f3 100%);
-      }
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        font-family: "Source Sans 3", "Segoe UI", sans-serif;
-        color: var(--cg-ink);
-        background: var(--cg-bg);
-        min-height: 100vh;
-      }
-      header {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid rgba(26, 43, 60, 0.08);
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(8px);
-      }
-      header img { height: 48px; width: auto; }
-      header h1 { margin: 0; font-size: 1.35rem; font-weight: 700; }
-      header p { margin: 0.15rem 0 0; color: var(--cg-muted); font-size: 0.9rem; }
-      main { max-width: 720px; margin: 0 auto; padding: 1.5rem; }
-      .card {
-        background: #fff;
-        border-radius: 12px;
-        padding: 1.25rem 1.5rem;
-        margin-bottom: 1rem;
-        box-shadow: 0 1px 3px rgba(26, 43, 60, 0.06);
-      }
-      .card h2 { margin: 0 0 0.75rem; font-size: 1.1rem; }
-      .fee-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.85rem 0;
-        border-top: 1px solid #eef2f5;
-      }
-      .fee-row:first-of-type { border-top: none; }
-      .fee-meta { flex: 1; min-width: 180px; }
-      .fee-meta strong { display: block; }
-      .fee-meta span { color: var(--cg-muted); font-size: 0.85rem; }
-      .amount { font-weight: 700; color: var(--cg-accent); white-space: nowrap; }
-      button, .btn {
-        appearance: none;
-        border: none;
-        background: var(--cg-accent);
-        color: #fff;
-        padding: 0.55rem 1rem;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 0.9rem;
-      }
-      button:disabled { opacity: 0.5; cursor: not-allowed; }
-      .pay-form label { display: block; font-size: 0.85rem; margin: 0.5rem 0 0.25rem; }
-      .pay-form select, .pay-form input {
-        width: 100%;
-        padding: 0.5rem 0.65rem;
-        border: 1px solid #cfd8e0;
-        border-radius: 8px;
-        font-size: 1rem;
-      }
-      .status { margin-top: 0.75rem; font-size: 0.9rem; }
-      .status.ok { color: #0a7a3e; }
-      .status.err { color: #b00020; }
-      .login-hint a { color: var(--cg-accent); font-weight: 600; }
-      footer { text-align: center; padding: 2rem 1rem; color: var(--cg-muted); font-size: 0.8rem; }
-    </style>
+    <title>{{ abbr }}</title>
+    <!-- Education SPA (vendored under citigems_custom — /assets/education/frontend is absent on this bench) -->
+    <script type="module" crossorigin src="/assets/citigems_custom/education_frontend/assets/index.4bcff034.js"></script>
+    <link rel="modulepreload" href="/assets/citigems_custom/education_frontend/assets/frappe-ui.5214fb40.js" />
+    <link rel="stylesheet" href="/assets/citigems_custom/education_frontend/assets/frappe-ui.005832b0.css" />
+    <link rel="stylesheet" href="/assets/citigems_custom/education_frontend/assets/index.92fa9b3a.css" />
+    <!-- Citigems chrome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/citigems_custom/css/citigems_brand.css?v=20261112g" />
   </head>
-  <body>
-    <header>
-      <img src="{{ logo }}" alt="{{ abbr }}" />
-      <div>
-        <h1>{{ abbr }}</h1>
-        <p>Portail élève / tuteur — frais de scolarité</p>
-      </div>
-    </header>
-    <main>
-      {% if is_guest %}
-      <div class="card login-hint">
-        <h2>Connexion requise</h2>
-        <p>Connectez-vous avec un compte <strong>Élève</strong> ou <strong>Tuteur</strong> pour voir et payer les frais.</p>
-        <p><a href="/login?redirect-to=/edu-portal">Se connecter</a></p>
-      </div>
-      {% else %}
-      <div class="card">
-        <h2>Frais en souffrance</h2>
-        <div id="fees-list"><p>Chargement…</p></div>
-      </div>
-      <div class="card" id="pay-panel" hidden>
-        <h2>Payer les frais</h2>
-        <p id="pay-invoice-label"></p>
-        <div class="pay-form">
-          <label for="operator">Opérateur Mobile Money</label>
-          <select id="operator">
-            <option value="MTN">MTN</option>
-            <option value="MOOV">MOOV</option>
-            <option value="CELTIIS">CELTIIS</option>
-          </select>
-          <label for="phone">Téléphone (ex. 0197123456)</label>
-          <input id="phone" type="tel" inputmode="numeric" placeholder="0197123456" />
-          <p style="margin-top:1rem">
-            <button type="button" id="pay-btn">Payer les frais</button>
-          </p>
-          <p class="status" id="pay-status"></p>
-        </div>
-      </div>
-      {% endif %}
-    </main>
-    <footer>{{ powered_by }}</footer>
+  <body class="citigems-edu-spa">
+    <div id="app"></div>
+    <div id="modals"></div>
+    <div id="popovers"></div>
+
     <script>
-      window.csrf_token = "{{ frappe.session.csrf_token }}";
-      {% if not is_guest %}
+      window.csrf_token = "{{ csrf_token }}";
+      window.document.title = "{{ abbr }}";
       (function () {
-        var selected = null;
-        var listEl = document.getElementById("fees-list");
-        var panel = document.getElementById("pay-panel");
-        var label = document.getElementById("pay-invoice-label");
-        var statusEl = document.getElementById("pay-status");
-
-        function api(method, args) {
-          return fetch("/api/method/" + method, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-Frappe-CSRF-Token": window.csrf_token,
-            },
-            body: JSON.stringify(args || {}),
-            credentials: "same-origin",
-          }).then(function (r) { return r.json(); });
+        var m = document.cookie.match(/(?:^|;\s*)preferred_language=([^;]*)/);
+        var c = m ? decodeURIComponent(m[1]).toLowerCase() : "";
+        window.citigemsLang = c === "en" ? "en" : "fr";
+        document.documentElement.setAttribute("lang", window.citigemsLang);
+        var link = document.querySelector("link[rel~='icon']");
+        if (!link) {
+          link = document.createElement("link");
+          link.rel = "icon";
+          document.getElementsByTagName("head")[0].appendChild(link);
         }
-
-        function money(n, cur) {
-          return Number(n).toLocaleString("fr-FR") + " " + (cur || "XOF");
-        }
-
-        function loadFees() {
-          api("citigems_custom.api.fedapay.list_outstanding_fees", {}).then(function (res) {
-            var rows = (res && res.message) || [];
-            if (!rows.length) {
-              listEl.innerHTML = "<p>Aucun frais en souffrance.</p>";
-              return;
-            }
-            listEl.innerHTML = "";
-            rows.forEach(function (inv) {
-              var row = document.createElement("div");
-              row.className = "fee-row";
-              row.innerHTML =
-                '<div class="fee-meta"><strong>' + inv.name + "</strong>" +
-                "<span>" + (inv.customer_name || "") +
-                (inv.due_date ? " · échéance " + inv.due_date : "") +
-                "</span></div>" +
-                '<div class="amount">' + money(inv.outstanding_amount, inv.currency) + "</div>";
-              var btn = document.createElement("button");
-              btn.type = "button";
-              btn.textContent = "Payer les frais";
-              btn.addEventListener("click", function () {
-                selected = inv;
-                label.textContent = inv.name + " — " + money(inv.outstanding_amount, inv.currency);
-                panel.hidden = false;
-                statusEl.textContent = "";
-                statusEl.className = "status";
-                panel.scrollIntoView({ behavior: "smooth" });
-              });
-              row.appendChild(btn);
-              listEl.appendChild(row);
-            });
-          }).catch(function (e) {
-            listEl.innerHTML = "<p class='status err'>Impossible de charger les frais.</p>";
-          });
-        }
-
-        document.getElementById("pay-btn").addEventListener("click", function () {
-          if (!selected) return;
-          var btn = this;
-          btn.disabled = true;
-          statusEl.className = "status";
-          statusEl.textContent = "Envoi de la demande de paiement…";
-          api("citigems_custom.api.fedapay.create_fee_payment", {
-            sales_invoice: selected.name,
-            operator: document.getElementById("operator").value,
-            phone_number: document.getElementById("phone").value,
-          }).then(function (res) {
-            if (res.exc || (res._server_messages && !res.message)) {
-              throw new Error((res._server_messages || res.exc || "Erreur").toString());
-            }
-            var msg = res.message || {};
-            statusEl.className = "status ok";
-            statusEl.textContent = msg.message || "Confirmez le paiement sur votre téléphone.";
-            var paymentName = msg.payment_name;
-            if (!paymentName) return;
-            var tries = 0;
-            var timer = setInterval(function () {
-              tries += 1;
-              api("citigems_custom.api.fedapay.get_payment_status", {
-                payment_name: paymentName,
-              }).then(function (st) {
-                var s = (st.message || {}).status;
-                if (s === "Approved") {
-                  clearInterval(timer);
-                  statusEl.textContent = "Paiement confirmé.";
-                  loadFees();
-                  panel.hidden = true;
-                } else if (s && s !== "Pending") {
-                  clearInterval(timer);
-                  statusEl.className = "status err";
-                  statusEl.textContent = "Statut : " + s;
-                }
-              });
-              if (tries > 40) clearInterval(timer);
-            }, 3000);
-          }).catch(function (err) {
-            statusEl.className = "status err";
-            statusEl.textContent = err.message || "Échec du paiement.";
-          }).finally(function () {
-            btn.disabled = false;
-          });
-        });
-
-        loadFees();
+        link.href = "{{ logo }}";
       })();
-      {% endif %}
     </script>
+    <script src="/assets/citigems_custom/js/edu_portal_chrome.js?v=20261112g"></script>
   </body>
 </html>

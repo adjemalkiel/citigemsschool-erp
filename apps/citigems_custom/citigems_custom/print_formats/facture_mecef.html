@@ -1,10 +1,264 @@
-{# Jinja snippet — attach via Print Format "Facture MECeF" or Letter Head.
-   Requires jinja methods mecef_qr_base64 / file_to_data_uri from hooks. #}
-{% if doc.mecef_envoye and doc.mecef_qr_code %}
-<div style="margin-top:12px;border-top:1px solid #ccc;padding-top:8px;font-size:11px;">
-  <strong>Facture normalisée e-MECeF</strong><br>
-  Code : {{ doc.mecef_numero }}<br>
-  NIM : {{ doc.mecef_nim }}<br>
-  <img src="{{ mecef_qr_base64(doc.mecef_qr_code, 4) }}" alt="QR MECeF" style="width:120px;height:120px;margin-top:6px;" />
+{#- wkhtmltopdf needs a fixed page-height; size it to the ticket, not A4. -#}
+{%- set _n = (doc.items|length) if doc.items else 0 -%}
+{%- set _paid = frappe.utils.flt(doc.grand_total) - frappe.utils.flt(doc.outstanding_amount) -%}
+{#- Content budget + ~8mm for Frappe printview chrome (avoids blank 2nd page). -#}
+{%- set page_h = 106
+	+ (_n * 8)
+	+ (12 if frappe.utils.flt(doc.total_taxes_and_charges) else 0)
+	+ (16 if (doc.status == "Paid" or _paid > 0) else 0)
+	+ (48 if (doc.mecef_envoye and doc.mecef_qr_code) else 0)
+-%}
+{%- set page_h = 120 if page_h < 120 else (297 if page_h > 297 else page_h) -%}
+<style>
+	/*
+	 * Thermal 80mm page. Content must be width:100% of the printable area —
+	 * never width:80mm + PDF margins (that overflows and clips the right edge).
+	 * page-height tracks content so the PDF does not leave A4 blank below.
+	 */
+	.print-format {
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 12px;
+		font-weight: 700;
+		color: #000 !important;
+		line-height: 1.45;
+		page-size: Custom;
+		page-width: 80mm;
+		page-height: {{ page_h }}mm;
+		margin-top: 0mm;
+		margin-bottom: 0mm;
+		margin-left: 0mm;
+		margin-right: 0mm;
+		width: 100% !important;
+		max-width: 100% !important;
+		height: auto;
+		min-height: 0 !important;
+		box-sizing: border-box !important;
+		padding: 3mm !important;
+		overflow: hidden;
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+	}
+	@media screen {
+		.print-format {
+			width: 80mm !important;
+			max-width: 80mm !important;
+			padding: 3mm !important;
+			margin: 0 auto !important;
+			background: #fff;
+			min-height: 0 !important;
+			height: auto !important;
+			box-shadow: 0 0 6px rgba(0,0,0,.12);
+		}
+	}
+	@media print {
+		@page { size: 80mm auto; margin: 0; }
+		html, body {
+			width: 100% !important;
+			max-width: 100% !important;
+			height: auto !important;
+			min-height: 0 !important;
+			margin: 0 !important;
+			padding: 0 !important;
+			background: #fff !important;
+			color: #000 !important;
+		}
+		.print-format-gutter,
+		.print-format {
+			width: 100% !important;
+			max-width: 100% !important;
+			margin: 0 !important;
+			padding: 3mm !important;
+			box-shadow: none !important;
+			box-sizing: border-box !important;
+			color: #000 !important;
+		}
+	}
+	.print-format * { box-sizing: border-box; color: #000 !important; max-width: 100%; }
+	.rc-wrap { width: 100%; max-width: 100%; margin: 0; overflow: hidden; }
+	.rc-center { text-align: center; }
+	.rc-bold { font-weight: 900; }
+	.rc-shop {
+		font-size: 14px; font-weight: 900; margin: 0 0 6px 0;
+		letter-spacing: 0.2px; text-transform: uppercase;
+		line-height: 1.3;
+		word-break: break-word;
+	}
+	.rc-line {
+		margin: 0 0 4px 0; padding: 0;
+		font-size: 11px; font-weight: 700; line-height: 1.35;
+		word-break: break-word;
+	}
+	.rc-sep {
+		border: 0; border-top: 2px dashed #000;
+		margin: 8px 0;
+		width: 100%;
+	}
+	.rc-solid {
+		border: 0; border-top: 2px solid #000;
+		margin: 8px 0;
+		width: 100%;
+	}
+	.rc-title {
+		font-size: 13px; font-weight: 900; letter-spacing: 0.3px;
+		margin: 6px 0 8px 0; text-transform: uppercase;
+		line-height: 1.3;
+	}
+	.rc-meta {
+		width: 100%; border-collapse: collapse; border-spacing: 0;
+		font-size: 11px; line-height: 1.4; font-weight: 700;
+		margin: 2px 0;
+		table-layout: fixed;
+	}
+	.rc-meta td {
+		padding: 4px 0 !important; vertical-align: top !important;
+		border: 0 !important; font-weight: 700; line-height: 1.35 !important;
+		word-break: break-word;
+	}
+	.rc-meta .lbl { width: 30%; white-space: nowrap; padding-right: 4px !important; }
+	.rc-meta .val { width: 70%; text-align: left; }
+	.rc-items {
+		width: 100%; border-collapse: collapse; table-layout: fixed;
+		font-size: 11px; margin: 2px 0;
+	}
+	.rc-items th, .rc-items td {
+		padding: 4px 1px; vertical-align: top; font-weight: 700; line-height: 1.3;
+		word-break: break-word;
+		overflow: hidden;
+	}
+	.rc-items th {
+		font-weight: 900; text-transform: uppercase; font-size: 10px;
+		padding-bottom: 5px;
+	}
+	.rc-col-des { width: 38%; text-align: left; }
+	.rc-col-qty { width: 10%; text-align: center; white-space: nowrap; }
+	.rc-col-pu  { width: 26%; text-align: right; white-space: nowrap; }
+	.rc-col-mt  { width: 26%; text-align: right; white-space: nowrap; }
+	.rc-total { width: 100%; border-collapse: collapse; font-size: 12px; margin: 2px 0; table-layout: fixed; }
+	.rc-total td { padding: 4px 0; font-weight: 900; line-height: 1.3; }
+	.rc-total td:first-child { width: 42%; text-align: left; }
+	.rc-total .amt { width: 58%; text-align: right; white-space: nowrap; overflow: hidden; }
+	.rc-mecef { margin: 6px 0 2px; }
+	.rc-mecef .rc-bold { margin: 0 0 8px 0 !important; font-size: 12px; }
+	.rc-mecef img { width: 110px; height: 110px; margin: 6px auto 8px; display: block; }
+	.rc-mecef .rc-line { margin-bottom: 4px; font-size: 10px; }
+	.rc-thanks {
+		margin: 10px 0 2px 0; font-size: 12px; font-weight: 700;
+		line-height: 1.35;
+	}
+</style>
+
+{%- macro money(v) -%}
+{%- set n = frappe.utils.flt(frappe.utils.flt(v or 0), 0) -%}
+{{- "{:.0f}".format(n) -}}
+{%- endmacro -%}
+
+{%- macro qty(v) -%}
+{%- set n = frappe.utils.flt(v or 0) -%}
+{%- if n == frappe.utils.flt(n|int) -%}{{- n|int -}}{%- else -%}{{- n -}}{%- endif -%}
+{%- endmacro -%}
+
+{%- set company = frappe.get_doc("Company", doc.company) if doc.company else None -%}
+{%- set phone = company.phone_no if company else None -%}
+{%- set addr_name = frappe.db.get_value("Dynamic Link", {"link_doctype":"Company","link_name":doc.company,"parenttype":"Address"}, "parent") if doc.company else None -%}
+{%- set addr_doc = frappe.get_doc("Address", addr_name) if addr_name else None -%}
+{%- set addr = None -%}
+{%- if addr_doc -%}
+	{%- set addr = addr_doc.address_line1 -%}
+	{%- if addr_doc.city -%}{%- set addr = addr + ", " + addr_doc.city -%}{%- endif -%}
+{%- endif -%}
+{%- set mecef = frappe.db.get_value("MeCef Settings", {"company": doc.company, "is_active": 1}, ["ifu","operator_name"], as_dict=True) if doc.company else None -%}
+{%- if not mecef and doc.company and frappe.db.exists("MeCef Settings", doc.company) -%}
+	{%- set mecef = frappe.db.get_value("MeCef Settings", doc.company, ["ifu","operator_name"], as_dict=True) -%}
+{%- endif -%}
+{%- set ifu = (mecef.ifu if mecef else None) or (company.tax_id if company else None) -%}
+{%- set total = frappe.utils.flt(doc.rounded_total if doc.rounded_total is not none else doc.grand_total) -%}
+{%- set net = frappe.utils.flt(doc.net_total) -%}
+{%- set tax = frappe.utils.flt(doc.total_taxes_and_charges) -%}
+{%- set paid = frappe.utils.flt(doc.grand_total) - frappe.utils.flt(doc.outstanding_amount) -%}
+{%- set d = frappe.utils.getdate(doc.posting_date) -%}
+{%- set date_str = "{:02d}/{:02d}/{:04d}".format(d.day, d.month, d.year) -%}
+{%- if doc.posting_time -%}
+	{%- set t = frappe.utils.get_time(doc.posting_time) -%}
+	{%- set date_str = date_str + " {:02d}:{:02d}".format(t.hour, t.minute) -%}
+{%- endif -%}
+{#- Prefer download_pdf?language= (portal FR/EN); printview can reset local.lang. -#}
+{%- set _lang = (frappe.form_dict.language if frappe.form_dict else None) or frappe.local.lang or "fr" -%}
+{%- set en = (_lang|string|lower)[:2] == "en" -%}
+{%- set cashier = (mecef.operator_name if mecef and mecef.operator_name else None) or doc.owner or ("Cashier" if en else "Caissier") -%}
+
+<div class="rc-wrap">
+	<div class="rc-center">
+		<p class="rc-shop">{{ company.company_name if company else (doc.company or "Citigems") }}</p>
+		{%- if addr -%}<p class="rc-line">{{ addr }}</p>{%- endif -%}
+		{%- if not addr -%}<p class="rc-line">Cotonou, {{ "Benin" if en else "Bénin" }}</p>{%- endif -%}
+		{%- if phone -%}<p class="rc-line">Tel: {{ phone }}</p>{%- endif -%}
+		{%- if ifu -%}<p class="rc-line">IFU: {{ ifu }}</p>{%- endif -%}
+	</div>
+
+	<hr class="rc-sep">
+	<p class="rc-center rc-title">{{ "CASH RECEIPT" if en else "RECU DE CAISSE" }}</p>
+
+	<table class="rc-meta">
+		<tr><td class="lbl">{{ "Receipt No.:" if en else "N° Recu :" }}</td><td class="val">{{ doc.name }}</td></tr>
+		<tr><td class="lbl">{{ "Date:" if en else "Date :" }}</td><td class="val">{{ date_str }}</td></tr>
+		<tr><td class="lbl">{{ "Cashier:" if en else "Caissier :" }}</td><td class="val">{{ cashier }}</td></tr>
+		<tr><td class="lbl">{{ "Customer:" if en else "Client :" }}</td><td class="val">{{ doc.customer_name or doc.customer or ("Customer" if en else "Client") }}</td></tr>
+	</table>
+
+	<hr class="rc-sep">
+	<table class="rc-items">
+		<thead>
+			<tr>
+				<th class="rc-col-des">{{ "DESCRIPTION" if en else "DESIGNATION" }}</th>
+				<th class="rc-col-qty">{{ "QTY" if en else "QTE" }}</th>
+				<th class="rc-col-pu">{{ "UNIT" if en else "PU" }}</th>
+				<th class="rc-col-mt">{{ "AMOUNT" if en else "MONTANT" }}</th>
+			</tr>
+		</thead>
+		<tbody>
+		{%- for row in doc.items -%}
+			<tr>
+				<td class="rc-col-des">{{ row.item_name or row.item_code }}</td>
+				<td class="rc-col-qty">{{ qty(row.qty) }}</td>
+				<td class="rc-col-pu">{{ money(row.rate) }}</td>
+				<td class="rc-col-mt">{{ money(row.amount) }}</td>
+			</tr>
+		{%- endfor -%}
+		</tbody>
+	</table>
+
+	<hr class="rc-sep">
+	<table class="rc-total">
+		<tr><td>{{ "TOTAL INCL. TAX" if en else "TOTAL TTC" }}</td><td class="amt">{{ money(total) }} FCFA</td></tr>
+	</table>
+
+	{%- if tax -%}
+	<hr class="rc-sep">
+	<table class="rc-total" style="font-size:12px;">
+		<tr><td>{{ "Subtotal excl. tax" if en else "Total HT" }}</td><td class="amt">{{ money(net) }} FCFA</td></tr>
+		<tr><td>{{ "VAT" if en else "TVA" }}</td><td class="amt">{{ money(tax) }} FCFA</td></tr>
+	</table>
+	{%- endif -%}
+
+	{%- if doc.status == "Paid" or paid > 0 -%}
+	<hr class="rc-sep">
+	<table class="rc-total" style="font-size:13px;">
+		<tr><td>Cash</td><td class="amt">{{ money(paid or total) }} FCFA</td></tr>
+		<tr><td>{{ "Paid" if en else "Paye" }}</td><td class="amt">{{ money(paid or total) }} FCFA</td></tr>
+	</table>
+	{%- endif -%}
+
+	<hr class="rc-sep">
+	{%- if doc.mecef_envoye and doc.mecef_qr_code -%}
+	<div class="rc-mecef rc-center">
+		{#- MECeF legal wording stays FR (e-MECeF / DGI Benin). -#}
+		<p class="rc-bold">Facture Normalisee e-MECeF</p>
+		<img src="{{ mecef_qr_base64(doc.mecef_qr_code, 5) }}" alt="QR MECeF" />
+		<p class="rc-line">Code MECeF: {{ doc.mecef_numero }}</p>
+		<p class="rc-line">NIM: {{ doc.mecef_nim }}</p>
+	</div>
+	<hr class="rc-sep">
+	{%- endif -%}
+
+	<p class="rc-center rc-thanks">{{ "Thank you for your visit." if en else "Merci de votre visite." }}</p>
 </div>
-{% endif %}

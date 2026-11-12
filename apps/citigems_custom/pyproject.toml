@@ -4,7 +4,7 @@ authors = [
     { name = "Malkiel Adje", email = "adjemalkiel@gmail.com"}
 ]
 description = "Citigems School ERP customizations — e-MECeF, FedaPay, French branding"
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.15"
 readme = "README.md"
 dynamic = ["version"]
 dependencies = [

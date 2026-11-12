@@ -26,3 +26,17 @@ def after_install():
 		sync_translations()
 	except Exception:
 		frappe.log_error(title="citigems_custom after_install translations")
+
+	try:
+		from citigems_custom.education_workspace import ensure_education_workspace
+
+		ensure_education_workspace()
+	except Exception:
+		frappe.log_error(title="citigems_custom after_install education workspace")
+
+	try:
+		from citigems_custom.website_home import ensure_portal_roles_no_desk
+
+		ensure_portal_roles_no_desk()
+	except Exception:
+		frappe.log_error(title="citigems_custom after_install portal roles")

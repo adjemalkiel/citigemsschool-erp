@@ -145,5 +145,17 @@
   "options": "\nA\nB\nC\nD\nE\nF",
   "insert_after": "title",
   "name": "Sales Taxes and Charges Template-mecef_tax_group"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Education Settings",
+  "fieldname": "citigems_fees_print_format",
+  "label": "Format impression frais (portail)",
+  "fieldtype": "Link",
+  "options": "Print Format",
+  "default": "Facture MECeF Citigems",
+  "description": "Reçu portail parents. Défaut : Facture MECeF Citigems (facture normalisée). Repli : Sales Invoice Classic.",
+  "insert_after": "school_college_logo",
+  "name": "Education Settings-citigems_fees_print_format"
  }
 ]
